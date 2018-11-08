@@ -13,7 +13,43 @@
         <title>Badass Battleship</title>
     </head>
     <body>
-        <h1>Badass Battleship</h1>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">Badass Battleship</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-default" aria-controls="nav-default" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="nav-default">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="container">
+            <div class="game">
+                <div class="button-bar">
+                    <button id="new-match" type="button" class="btn btn-success btn-lg">New Match</button>
+                    <button id="join-match" type="button" class="btn btn-primary btn-lg">Join Match</button>
+                </div>
+                <div class="battle-grids">
+                    <div class="battle-grid-container">
+                        <table class="battle-grid" id="self"></table>
+                        <div class="battle-grid label">Self</div>
+                    </div>
+                    <div class="battle-grid-container">
+                        <table class="battle-grid" id="opponent"></table>
+                        <div class="battle-grid label">Opponent</div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </main>
 
         <!-- Bootstrap related -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

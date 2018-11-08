@@ -1,0 +1,40 @@
+.game {
+    padding-top: 60px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.battle-grids {
+    padding: 25px;
+}
+.battle-grid-container {
+    float: left;
+    padding-right: 100px;
+}
+.battle-grid {
+    width: 400px;
+    height: 400px;
+}
+.battle-grid.label {
+    text-align: center;
+}
+.battle-grid tr {
+
+}
+.battle-grid td {
+    border: thin solid #7a7a7a;
+    text-align: center;
+    vertical-align: center;
+    /* Force sizes - there's definitely a better way for this */
+    min-width: 5px;
+    max-width: 5px;
+    min-height: 5px;
+    max-height: 5px;
+}
+.battle-grid td.coord {
+    border: none;
+    color: #7a7a7a;
+}
+.clearfix {
+    clear: both;
+}
