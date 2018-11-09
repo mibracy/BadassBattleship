@@ -15,12 +15,6 @@
     width: 400px;
     height: 400px;
 }
-.battle-grid.label {
-    text-align: center;
-}
-.battle-grid tr {
-
-}
 .battle-grid td {
     border: thin solid #7a7a7a;
     text-align: center;

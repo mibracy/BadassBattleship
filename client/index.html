@@ -28,23 +28,21 @@
                         <a class="nav-link" href="#">About</a>
                     </li>
                 </ul>
+                <form class="form-inline">
+                    <button class="btn btn-success" type="button">New Match</button>
+                    <button class="btn btn-primary" type="button">Join Match</button>
+                </form>
             </div>
         </nav>
 
         <main role="main" class="container">
             <div class="game">
-                <div class="button-bar">
-                    <button id="new-match" type="button" class="btn btn-success btn-md">New Match</button>
-                    <button id="join-match" type="button" class="btn btn-primary btn-md">Join Match</button>
-                </div>
                 <div class="battle-grids">
                     <div class="battle-grid-container">
                         <table class="battle-grid" id="self"></table>
-                        <div class="battle-grid label">Self</div>
                     </div>
                     <div class="battle-grid-container">
                         <table class="battle-grid" id="opponent"></table>
-                        <div class="battle-grid label">Opponent</div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
