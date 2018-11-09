@@ -32,3 +32,6 @@
 .clearfix {
     clear: both;
 }
+#match-bar button:last-child {
+    margin-left: 5px;
+}
