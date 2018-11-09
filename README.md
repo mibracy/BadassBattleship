@@ -1,4 +1,8 @@
 # BadassBattleship
+This is a client-server based Battleship game. The frontend is written in JavaScript and jQuery, and the backend (server)
+is written in Java plus Spark as our simple REST framework.
+
+## License
 
             
 				        GLWTS(Good Luck With That Shit) Public License
