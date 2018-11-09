@@ -10,6 +10,9 @@ const LABEL_COLUMNS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 $(document).ready(function() {
 
+    // Fade out the grids before we do anthing else.
+    $('.battle-grids').css('opacity', '0.3');
+
     // Create the two grids.
     createBattleGrid('#self', 10, 10);
     createBattleGrid('#opponent', 10, 10);

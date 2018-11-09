@@ -1,8 +1,14 @@
+* {
+    font-family: 'Arvo', sans-serif;
+}
 .game {
-    padding-top: 60px;
+    padding-top: 120px;
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+.navbar-brand img {
+    width: 150px;
 }
 .battle-grids {
     padding: 25px;
