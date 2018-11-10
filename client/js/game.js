@@ -11,11 +11,18 @@ const LABEL_COLUMNS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $(document).ready(function() {
 
     // Fade out the grids before we do anthing else.
-    $('.battle-grids').css('opacity', '0.3');
+    //$('.battle-grids').css('opacity', '0.3');
+
+    $( "#draggable5" ).draggable({ grid: [ 36, 36 ] });
 
     // Create the two grids.
     createBattleGrid('#self', 10, 10);
     createBattleGrid('#opponent', 10, 10);
+
+    var pos = $('#self #cell-0-1').position();
+    $(" #draggable5").css("top", pos.top);
+    $(" #draggable5").css("left", pos.left);
+    console.log();
 
     /**
      * Generate a "battle" grid table with proper headings and so on
