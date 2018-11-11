@@ -31,10 +31,12 @@
                         <a class="nav-link" href="#">About</a>
                     </li>
                 </ul>
-                <form class="form-inline" id="match-bar">
-                    <button class="btn btn-success" type="button">New Match</button>
-                    <button class="btn btn-outline-primary" type="button">Join Match</button>
-                </form>
+                <div class="form-inline" id="match-bar">
+                    <input id="player-name" class="form-control mr-sm-2" type="text" placeholder="Enter name..." aria-label="Player Name">
+                    <button id="new-match" class="btn btn-success" type="button">New Match</button>
+                    <input id="match-id" class="form-control mr-sm-2" type="text" placeholder="Enter match ID..." aria-label="Match ID">
+                    <button id="join-match" class="btn btn-outline-primary" type="button">Join Match</button>
+                </div>
             </div>
         </nav>
 
@@ -43,9 +45,7 @@
                 <div class="battle-grids">
 
                     <div class="battle-grid-container">
-
-                        <div id="draggable5" class="draggable ui-widget-content">
-                        </div>
+                        <!--<div id="draggable5" class="draggable ui-widget-content"></div>-->
                         <table class="battle-grid" id="self"></table>
                     </div>
                     <div class="battle-grid-container">

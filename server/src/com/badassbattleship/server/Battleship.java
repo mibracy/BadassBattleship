@@ -8,6 +8,8 @@
 
 package com.badassbattleship.server;
 
+import java.util.logging.LogManager;
+
 import static spark.Spark.*;
 
 public class Battleship {
@@ -17,7 +19,19 @@ public class Battleship {
 		// This is an example of a REST end point.
 		// We will use this to output info about ships and placements etc...
 		
-		get("/hello", (req, res) -> "Badass Battleship says hello!");
+		post("/match/new", (req, res) -> {
+
+			return "";
+		});
+
+		path("/api", () -> {
+			path("/match", () -> {
+				post("/new", MatchManager.getInstance()::newMatch);
+				post("/join", (req, res) -> {
+					return "";
+				});
+			});
+		});
 	}
 
 }

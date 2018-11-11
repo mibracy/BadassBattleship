@@ -48,6 +48,6 @@
 .ui-draggable, .ui-droppable {
     background-position: top;
 }
-#match-bar button:last-child {
+#match-bar * {
     margin-left: 5px;
 }
