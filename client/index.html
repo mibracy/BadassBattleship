@@ -35,23 +35,28 @@
                     <input id="player-name" class="form-control mr-sm-2" type="text" placeholder="Enter name..." aria-label="Player Name">
                     <button id="new-match" class="btn btn-success" type="button">New Match</button>
                     <input id="match-id" class="form-control mr-sm-2" type="text" placeholder="Enter match ID..." aria-label="Match ID">
-                    <button id="join-match" class="btn btn-outline-primary" type="button">Join Match</button>
+                    <button id="join-match" class="btn btn-primary" type="button">Join Match</button>
                 </div>
             </div>
         </nav>
 
         <main role="main" class="container">
             <div class="game">
-                <div class="battle-grids">
-
-                    <div class="battle-grid-container">
+                <div id="status" class="row text-center">
+                    You are not in a game. Click "New Match" to create a new match and share the match ID with a friend.
+                    If you received a match ID from a friend, enter it in the text box above and click "Join Match".
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-lg-6 text-center">
                         <!--<div id="draggable5" class="draggable ui-widget-content"></div>-->
+                        <h3>Self</h3>
                         <table class="battle-grid" id="self"></table>
                     </div>
-                    <div class="battle-grid-container">
+                    <div class="col-lg-6 text-center">
+                        <h3>Opponent</h3>
                         <table class="battle-grid" id="opponent"></table>
                     </div>
-                    <div class="clearfix"></div>
                 </div>
             </div>
         </main>

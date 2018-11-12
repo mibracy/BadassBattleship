@@ -10,6 +10,8 @@ const BASE_URL = "http://localhost:4567/api/";
 // Lazily label the columns for the game.
 const LABEL_COLUMNS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+const MAX_PLAYER_NAME_LENGTH = 20;
+
 $(document).ready(function() {
 
     // Fade out the grids before we do anthing else.
@@ -32,20 +34,16 @@ $(document).ready(function() {
     // Generate random player name
     $('#player-name').val('player' + $.now());
 
-    // TODO: maybe split up this functionality a little bit? Don't immediately associate it wit UI events?
-
     // New Match Button
     $('#new-match').click(function() { newMatch() });
 
     // Join Match Button
     $('#join-match').click(function() { joinMatch($('#match-id').val()) });
 
-    /**
-     * Generate a "battle" grid table with proper headings and so on
-     * @param table     selector for table element
-     * @param width     width of grid
-     * @param height    height of grid
-     */
+    // Show warning and cleanup before players try to leave
+    $(window).bind('beforeunload', function(){
+        return 'Are you sure you want to leave? Your match will be aborted and you cannot return.';
+    });
 
     //TODO: this is ugly!
     function createBattleGrid(table, width, height) {
@@ -77,57 +75,53 @@ $(document).ready(function() {
         var name = validateName();
         if(name !== '') {
             send('match/new', {'name': name}, function (response) {
-                // Parse response here
+                $('#match-id').val(response.id).select();
+                updateStatus(response);
             });
         }
     }
 
     function joinMatch(matchID) {
-        var name = validateName();;
+        var name = validateName();
         if(name !== '' && matchID !== '') {
-            send('match/join', {'match_id': matchID, 'name': name}, function (response) {
-                // Parser response here
+            send('match/join', {'id': matchID, 'name': name}, function (response) {
+                updateStatus(response);
             });
         }
     }
 
+    function updateStatus(response) {
+        $('#status').html('You are in a match. Status: <strong>' + response.status + '</strong> - Match ID: ' + response.id);
+    }
+
+    function errorStatus(error) {
+        $('#status').html('An error occurred: ' + error);
+    }
+
     function send(endpoint, data, callback) {
         $.ajax({
-            method: 'POST',
+            method: 'GET',
             url: BASE_URL + endpoint,
-            data: data
+            data: data,
+            dataType: 'json',
+            error: function(xhr, statusText, err) {
+                var data = JSON.parse(xhr.responseText);
+                console.log(xhr.responseText);
+                errorStatus(data.error);
+            }
         }).done(function( response ) {
             callback(response);
-        }).fail(function(xhr, textStatus, error){
-            alert('Error occurred: ' + xhr.statusText);
         });
     }
 
     function validateName() {
         var name = $('#player-name').val();
-        if(name !== '' && name.length < 20) {
+        if(name !== '' && name.length < MAX_PLAYER_NAME_LENGTH) {
             return name;
         } else {
-            alert('Player name has to be set and cannot be more than 20 character.');
+            alert('Player name has to be set and cannot be more than ' + MAX_PLAYER_NAME_LENGTH + ' character.');
             return '';
         }
     }
 
 });
-
-class Grid {
-    constructor(width, height) {
-        this.width = width;
-        this.height = height;
-    }
-    generate(container) {
-
-    }
-}
-
-class Ship {
-    constructor(size, position) {
-        this.size = size;
-        this.position = position;
-    }
-}

@@ -4,7 +4,12 @@ import java.util.UUID;
 
 public class Player {
 
+    private String name;
     private UUID id;
-    private String ip;
+
+    public Player(String name) {
+        this.name = name;
+        this.id = UUID.randomUUID();
+    }
 
 }
