@@ -4,7 +4,7 @@ package com.badassbattleship.server;
 public class Ship {
 	private boolean destroyed;
 	private int size;
-	private int orientation; // 0 for horizontal 1 for vertical
+	private ShipOrientation orientation; // 0 for horizontal 1 for vertical
 	private int hits;
 	
 	public Ship(int size) {
@@ -31,12 +31,16 @@ public class Ship {
 		}
 	}
 
-	public int getOrientation() {
+	public ShipOrientation getOrientation() {
 		return orientation;
 	}
 
-	public void setOrientation(int orientation) {
+	public void setOrientation(ShipOrientation orientation) {
 		this.orientation = orientation;
 	}
 
+}
+enum ShipOrientation {
+	HORIZONTAL,
+	VERTICAL
 }
