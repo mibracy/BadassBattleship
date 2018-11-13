@@ -14,11 +14,15 @@ import spark.Response;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * Singleton controller that allows for managing matches through the API.
+ */
 public class MatchController {
 
     private static Logger logger = LoggerFactory.getLogger(MatchController.class);
     private static MatchController instance = null;
 
+    // Stores active matches.
     private HashMap<UUID, Match> matches;
 
     private MatchController() {
@@ -54,6 +58,12 @@ public class MatchController {
         return newMatch;
     }
 
+    /**
+     * Responds to route to join a match.
+     * @param req
+     * @param res
+     * @return Returns match info if successful or otherwise error.
+     */
     public Object joinMatch(Request req, Response res) {
         String playerName = req.queryParams("name");
 
@@ -81,10 +91,22 @@ public class MatchController {
         return "{ \"error\": \"Invalid Match ID\" }";
     }
 
+    /**
+     * Responds to route that contains status of matches.
+     * @param req
+     * @param res
+     * @return
+     */
     public Object status(Request req, Response res) {
         return "not implemented";
     }
 
+    /**
+     * Responds to route to leave a match.
+     * @param req
+     * @param res
+     * @return
+     */
     public String leaveMatch(Request req, Response res) {
         return "not implemented";
     }

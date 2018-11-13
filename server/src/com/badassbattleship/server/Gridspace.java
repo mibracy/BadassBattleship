@@ -16,12 +16,6 @@ public class Gridspace {
 	public void setShip(Ship battleship) {
 		this.battleship = battleship;
 	}
-
-
-	
-	
-	
-	
 	
 
 }

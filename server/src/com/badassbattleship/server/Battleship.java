@@ -25,7 +25,7 @@ public class Battleship {
 			response.header("Access-Control-Allow-Methods", "GET,POST");
 		});
 
-		// Todo: should these be get? Probs not but too lazy to fix the ajax handle in client
+		// Todo: should these be GET? Probs not but too lazy to fix the ajax handle in client
 
 		// register game routes
 		path("/api", () -> {

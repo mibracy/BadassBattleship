@@ -12,17 +12,17 @@ public class Board {
 		aliveShips = 0;
 	}
 	
-	public void createShip(int size, int orentation, int row, int col) {
+	public void createShip(int size, int orientation, int row, int col) {
 		if (aliveShips < NUMSHIPS) {
 			aliveShips++;
 			Ship battleship = new Ship(size);
 			
 			//set ship to all gridspaces with battleship
-			if (size == 2 && orentation == 0) {
+			if (size == 2 && orientation == 0) {
 				grid[row][col].setShip(battleship);
 				grid[row][col + 1].setShip(battleship);
 			}
-			if (size == 2 && orentation == 1) {
+			if (size == 2 && orientation == 1) {
 				grid[row][col].setShip(battleship);
 				grid[row - 1][col].setShip(battleship);
 			}

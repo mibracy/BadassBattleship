@@ -1,8 +1,11 @@
+/**
+ * Author: Tobi Schweiger <tschwei@siue.edu>
+ * License: Under GLWTS public license (see repo).
+ * Purpose: Represents a match.
+ */
+
 package com.badassbattleship.server;
 
-import javafx.util.Pair;
-
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ public class Match {
     private MatchStatus status;
     private LocalDateTime created;
 
-    // We need to make sure we never add more than 2 players.
+    // We need to make sure we never add more than 2 players. Better data structure for that?
     private ArrayList<Player> players;
 
     public Match(UUID id, String playerName) {
