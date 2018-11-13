@@ -6,6 +6,7 @@
 
 package com.badassbattleship.server;
 
+import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -48,12 +49,11 @@ public class MatchController {
         String playerName = req.queryParams("name");
 
         UUID matchID = UUID.randomUUID();
-
         Match newMatch = new Match(matchID, playerName);
 
         matches.put(matchID, newMatch);
 
-        logger.info("Created new match with ID {} and player 1 named {}", matchID, playerName);
+        logger.info("Created new match with ID {} and player named {}", matchID, playerName);
 
         return newMatch;
     }
@@ -67,28 +67,31 @@ public class MatchController {
     public Object joinMatch(Request req, Response res) {
         String playerName = req.queryParams("name");
 
-        //todo: catch malformed identifier
-        UUID matchID = UUID.fromString(req.queryParams("id"));
+        try {
+            UUID matchID = UUID.fromString(req.queryParams("id"));
 
-        if(matches.containsKey(matchID)) {
-            Match match = matches.get(matchID);
-            Player player = match.addPlayer(playerName);
+            if (matches.containsKey(matchID)) {
+                Match match = matches.get(matchID);
+                Player player = match.addPlayer(playerName);
 
-            // We can actually join
-            if(player != null) {
-                logger.info("Added player {} to {}!", playerName, matchID);
-                return match;
+                // We can actually join
+                if (player != null) {
+                    logger.info("Added player {} to {}!", playerName, matchID);
+                    return match;
+                }
+
+                // Match is full
+                logger.error("Could not add player {} to match ID {} (match full).",
+                        playerName, matchID);
+                return ServerUtil.errorResponse(res, "Match full.");
             }
-
-            // Match is full
-            logger.error("Could not add player {} to match ID {}", playerName, matchID);
-            return "{ \"error\": \"Could not add player to match\" }";
+        } catch(IllegalArgumentException ex) {
+            logger.error("{} is not a valid match ID (illegal argument exception).",
+                    req.queryParams("id"));
+            // Fallthrough to below to tell user about invalid ID.
         }
 
-        // todo: make error method
-        res.type("application/json");
-        res.status(500);
-        return "{ \"error\": \"Invalid Match ID\" }";
+        return ServerUtil.errorResponse(res, "Invalid match ID.");
     }
 
     /**
@@ -98,7 +101,19 @@ public class MatchController {
      * @return
      */
     public Object status(Request req, Response res) {
-        return "not implemented";
+        try {
+            UUID matchID = UUID.fromString(req.queryParams("id"));
+
+            if (matches.containsKey(matchID)) {
+                Match match = matches.get(matchID);
+                return match;
+            }
+        } catch(IllegalArgumentException ex) {
+            logger.error("{} is not a valid match ID (illegal argument exception).",
+                    req.queryParams("id"));
+        }
+
+        return ServerUtil.errorResponse(res, "Invalid match.");
     }
 
     /**

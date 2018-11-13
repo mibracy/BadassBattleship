@@ -12,6 +12,11 @@ const LABEL_COLUMNS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 const MAX_PLAYER_NAME_LENGTH = 20;
 
+const REFRESH_RATE = 1000;
+
+var matchID;
+var playerName;
+
 $(document).ready(function() {
 
     // Fade out the grids before we do anthing else.
@@ -75,27 +80,46 @@ $(document).ready(function() {
         var name = validateName();
         if(name !== '') {
             send('match/new', {'name': name}, function (response) {
-                $('#match-id').val(response.id).select();
-                updateStatus(response);
+                matchID = response.id;
+                playerName = name;
+
+                $('#match-id').val(matchID).select();
+
+                update();
+                setInterval(update, REFRESH_RATE);
             });
         }
     }
 
-    function joinMatch(matchID) {
+    function joinMatch(id) {
         var name = validateName();
-        if(name !== '' && matchID !== '') {
-            send('match/join', {'id': matchID, 'name': name}, function (response) {
-                updateStatus(response);
+        if(name !== '' && id !== '') {
+            send('match/join', {'id': id, 'name': name}, function (response) {
+                matchID = response.id;
+                playerName = name;
+
+                update();
+                setInterval(update, REFRESH_RATE);
             });
         }
     }
 
-    function updateStatus(response) {
-        $('#status').html('You are in a match. Status: <strong>' + response.status + '</strong> - Match ID: ' + response.id);
+    function update() {
+        // Need to get info about match.
+        send('match/status', {'id': matchID }, function (response) {
+           updateStatus('Status: <strong>' + response.status + '</strong>');
+           if(response.status === 'PLAYING') {
+               updateStatus((response.playerTurn === playerName ? 'Your turn' : 'Opponent turn'));
+           }
+        });
+    }
+
+    function updateStatus(message) {
+        $('#status').html(message);
     }
 
     function errorStatus(error) {
-        $('#status').html('An error occurred: ' + error);
+        updateStatus('An error occurred: ' + error);
     }
 
     function send(endpoint, data, callback) {
@@ -103,14 +127,15 @@ $(document).ready(function() {
             method: 'GET',
             url: BASE_URL + endpoint,
             data: data,
+            timeout: 2000,
             dataType: 'json',
             error: function(xhr, statusText, err) {
                 var data = JSON.parse(xhr.responseText);
-                console.log(xhr.responseText);
                 errorStatus(data.error);
-            }
-        }).done(function( response ) {
-            callback(response);
+            },
+            success: callback
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            errorStatus(errorThrown);
         });
     }
 
@@ -119,7 +144,7 @@ $(document).ready(function() {
         if(name !== '' && name.length < MAX_PLAYER_NAME_LENGTH) {
             return name;
         } else {
-            alert('Player name has to be set and cannot be more than ' + MAX_PLAYER_NAME_LENGTH + ' character.');
+            errorStatus('Player name has to be set and cannot be more than ' + MAX_PLAYER_NAME_LENGTH + ' character.');
             return '';
         }
     }

@@ -23,6 +23,9 @@
     vertical-align: center;
     /* Force sizes - there's definitely a better way for this */
 }
+.battle-grid td:not(.coord):hover {
+    background: red;
+}
 .battle-grid td.coord {
     border: none;
     color: #7a7a7a;

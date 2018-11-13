@@ -6,7 +6,6 @@
 
 package com.badassbattleship.server;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -21,6 +20,8 @@ public class Match {
     // We need to make sure we never add more than 2 players. Better data structure for that?
     private ArrayList<Player> players;
 
+    private String playerTurn;
+
     public Match(UUID id, String playerName) {
         this.players = new ArrayList<>();
         this.id = id;
@@ -30,21 +31,24 @@ public class Match {
         addPlayer(playerName);
     }
 
-    private void update() {
-        if(players.size() == 2) {
-            this.status = MatchStatus.PLAYING;
-        }
-    }
-
     public Player addPlayer(String playerName) {
         if(players.size() < 2) {
             Player player = new Player(playerName);
             players.add(player);
 
-            update();
+            // We are ready for the match to start!
+            start();
+
             return player;
         }
         return null;
+    }
+
+    private void start() {
+        if(players.size() == 2) {
+            this.playerTurn = players.get(0).getName();
+            this.status = MatchStatus.PLAYING;
+        }
     }
 
 }
