@@ -22,6 +22,7 @@ public class MatchController {
     private HashMap<UUID, Match> matches;
 
     private MatchController() {
+        logger.info("Match controller has started.");
         matches = new HashMap<>();
     }
 
