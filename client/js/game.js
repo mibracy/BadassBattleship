@@ -110,6 +110,8 @@ $(document).ready(function() {
         });
     }
 
+    var prevOffset, curOffset;
+
     $( '.ship' ).draggable({
         grid: [ CELL_SIZE, CELL_SIZE ],
         containment: '.actual-grid',
@@ -118,7 +120,18 @@ $(document).ready(function() {
             var x = ui.position.left / CELL_SIZE;
             var y = ui.position.top / CELL_SIZE;
             console.log('being dragged! ' + x + ' ' + y);
+            prevOffset = curOffset;
+            curOffset = $.extend({},ui.offset);
         }
+    }).droppable({
+        // Prevent the ship from being placed too close to other ships
+        greedy: true,
+        over: function(e,ui) {
+            ui.helper.offset(curOffset= prevOffset).trigger("mouseup");
+        },
+        tolerance: "touch"
+    }).dblclick(function() {
+        console.log('db clic');
     });
 
     function createBattleGrid(table, width, height) {
