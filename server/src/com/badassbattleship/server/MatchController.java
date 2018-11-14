@@ -17,6 +17,8 @@ import java.util.UUID;
 /**
  * Singleton controller that allows for managing matches through the API.
  */
+
+//todo: there is still a lot of repeated code for match and player checking logic, clean this up!
 public class MatchController {
 
     private static Logger logger = LoggerFactory.getLogger(MatchController.class);
@@ -46,15 +48,29 @@ public class MatchController {
      */
     public Object newMatch(Request req, Response res) {
         String playerName = req.queryParams("name");
+        String shipsJSON = req.queryParams("ships");
 
         UUID matchID = UUID.randomUUID();
-        Match newMatch = new Match(matchID, playerName);
 
-        matches.put(matchID, newMatch);
+        try {
+            Match newMatch = new Match(matchID);
+            Player firstPlayer = newMatch.addPlayer(playerName);
 
-        logger.info("Created new match with ID {} and player named {}", matchID, playerName);
+            if(firstPlayer != null) {
+                firstPlayer.setBoard(BoardController.getInstance().createBoardFromJSON(shipsJSON));
 
-        return newMatch;
+                matches.put(matchID, newMatch);
+
+                logger.info("Created new match with ID {} and player, board named {}", matchID, playerName);
+
+                return newMatch;
+            }
+        } catch(Exception ex) {
+            logger.error("Player {} in {} error occurred: {}",
+                    playerName, matchID, ex.getMessage());
+        }
+
+        return ServerUtil.errorResponse(res, "An internal error occurred.");
     }
 
     /**
@@ -65,6 +81,7 @@ public class MatchController {
      */
     public Object joinMatch(Request req, Response res) {
         String playerName = req.queryParams("name");
+        String shipsJSON = req.queryParams("ships");
 
         try {
             UUID matchID = UUID.fromString(req.queryParams("id"));
@@ -75,22 +92,23 @@ public class MatchController {
 
                 // We can actually join
                 if (player != null) {
-                    logger.info("Added player {} to {}!", playerName, matchID);
+                    player.setBoard(BoardController.getInstance().createBoardFromJSON(shipsJSON));
+
+                    logger.info("Added player, board {} to {}!", playerName, matchID);
                     return match;
                 }
 
                 // Match is full
-                logger.error("Could not add player {} to match ID {} (match full).",
+                logger.error("Could not add player, board {} to match ID {} (match full).",
                         playerName, matchID);
                 return ServerUtil.errorResponse(res, "Match full.");
             }
-        } catch(IllegalArgumentException ex) {
-            logger.error("{} is not a valid match ID (illegal argument exception).",
-                    req.queryParams("id"));
-            // Fallthrough to below to tell user about invalid ID.
+        } catch(Exception ex) {
+            logger.error("Player {} in {} error occurred: {}",
+                    playerName, req.queryParams("id"), ex.getMessage());
         }
 
-        return ServerUtil.errorResponse(res, "Invalid match ID.");
+        return ServerUtil.errorResponse(res, "An internal error occurred.");
     }
 
     /**

@@ -15,7 +15,7 @@ const REFRESH_RATE = 1000;
 
 const ORIENTATION = { Horizontal: 0, Vertical: 1 };
 
-const SHIPS = [
+var ships = [
     {
         id: 'ship-carrier',
         size: 5,
@@ -75,7 +75,7 @@ $(document).ready(function() {
     createBattleGrid('#self', 10, 10);
     createBattleGrid('#opponent', 10, 10);
 
-    spawnShips(SHIPS);
+    spawnShips();
 
     /* UI Setup */
 
@@ -95,7 +95,9 @@ $(document).ready(function() {
         return 'Are you sure you want to leave? Your match will be aborted and you cannot return.';
     });
 
-    function spawnShips(ships) {
+    // TODO: separate all of this into separate OOP objects, bit of a mess right now!
+
+    function spawnShips() {
         ships.forEach(function(ship) {
             $('.actual-grid').append('<div id=\"' + ship.id + '\" class="ship"></div>');
             let shipDiv = $('#' + ship.id);
@@ -117,21 +119,29 @@ $(document).ready(function() {
         containment: '.actual-grid',
         cursor: 'move',
         drag: function(event, ui) {
-            var x = ui.position.left / CELL_SIZE;
-            var y = ui.position.top / CELL_SIZE;
-            console.log('being dragged! ' + x + ' ' + y);
             prevOffset = curOffset;
             curOffset = $.extend({},ui.offset);
+        },
+        stop: function(event, ui) {
+            var x = ui.position.left / CELL_SIZE;
+            var y = ui.position.top / CELL_SIZE;
+
+            // Update the local array of ships
+            var ship = ships.find(x => x.id === event.target.id);
+
+            ship.position.x = x;
+            ship.position.y = y;
         }
     }).droppable({
         // Prevent the ship from being placed too close to other ships
-        greedy: true,
+        greedy: false,
         over: function(e,ui) {
-            ui.helper.offset(curOffset= prevOffset).trigger("mouseup");
+            ui.helper.offset(curOffset = prevOffset).trigger('mouseup');
         },
-        tolerance: "touch"
-    }).dblclick(function() {
-        console.log('db clic');
+        tolerance: 'touch'
+    }).dblclick(function(event) {
+        //console.log(event.target);
+        //$(event.target).css('transform', 'rotate(90deg)');
     });
 
     function createBattleGrid(table, width, height) {
@@ -150,7 +160,7 @@ $(document).ready(function() {
     function newMatch() {
         var name = validateName();
         if(name !== '') {
-            send('match/new', {'name': name}, function (response) {
+            send('match/new', {'name': name, 'ships': JSON.stringify(ships)}, function (response) {
                 matchID = response.id;
                 playerName = name;
 
@@ -158,8 +168,7 @@ $(document).ready(function() {
 
                 $('#current-match-id').val(matchID).select();
 
-                update();
-                setInterval(update, REFRESH_RATE);
+                start(matchID);
             });
         }
     }
@@ -167,17 +176,24 @@ $(document).ready(function() {
     function joinMatch(id) {
         var name = validateName();
         if(name !== '' && id !== '') {
-            send('match/join', {'id': id, 'name': name}, function (response) {
+            send('match/join', {'id': id, 'name': name, 'ships': JSON.stringify(ships)}, function (response) {
                 matchID = response.id;
                 playerName = name;
 
                 showCancelMatchbar();
                 $('#current-match-id').hide();
 
-                update();
-                setInterval(update, REFRESH_RATE);
+                start(matchID);
             });
         }
+    }
+
+    function start(matchID) {
+        // Cannot drag anymore
+        $('.ship').draggable( 'disable' );
+
+        update();
+        setInterval(update, REFRESH_RATE);
     }
 
     function showCancelMatchbar() {
@@ -186,7 +202,6 @@ $(document).ready(function() {
     }
 
     function update() {
-
         // Need to get info about match.
         send('match/status', {'id': matchID }, function (response) {
            updateStatus('Status: <strong>' + response.status + '</strong>');

@@ -6,14 +6,21 @@
 
 package com.badassbattleship.server;
 
-
-import java.util.UUID;
-
 public class Player {
     private String name;
+    private Board board;
 
-    public Player(String name) {
+    public Player(String name) throws Exception {
+        if(name.length() > 20 || name.isEmpty()) throw new Exception("Name longer than 20 or empty.");
         this.name = name;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Board getBoard(Board board) {
+        return board;
     }
 
     public String getName() {

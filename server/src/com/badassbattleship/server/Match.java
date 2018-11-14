@@ -23,16 +23,14 @@ public class Match {
 
     private String playerTurn; // determine who's turn it is
 
-    public Match(UUID id, String playerName) {
+    public Match(UUID id) {
         this.players = new HashMap<>();
         this.id = id;
         this.status = MatchStatus.READY_BUT_WAITING_OPPONENT;
         this.created = LocalDateTime.now();
-
-        addPlayer(playerName);
     }
 
-    public Player addPlayer(String playerName) {
+    public Player addPlayer(String playerName) throws Exception {
         if(players.size() < 2) {
             Player player = new Player(playerName);
 
@@ -56,6 +54,14 @@ public class Match {
 
         // Update the status.
         this.status = MatchStatus.PLAYING;
+    }
+
+    public String getPlayerTurn() {
+        return playerTurn;
+    }
+
+    public MatchStatus getStatus() {
+        return status;
     }
 
 }
