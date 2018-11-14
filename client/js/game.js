@@ -7,32 +7,75 @@
 
 const BASE_URL = "http://localhost:4567/api/";
 
-// Lazily label the columns for the game.
-const LABEL_COLUMNS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
 const MAX_PLAYER_NAME_LENGTH = 20;
 
+const CELL_SIZE = 40; //if you modify this, it needs to be changed in the CSS
+
 const REFRESH_RATE = 1000;
+
+const ORIENTATION = { Horizontal: 0, Vertical: 1 };
+
+const SHIPS = [
+    {
+        id: 'ship-carrier',
+        size: 5,
+        type: 'CARRIER',
+        orientation: ORIENTATION.Horizontal,
+        position: { x: 1, y: 0 },
+    },
+    {
+        id: 'ship-battleship',
+        size: 4,
+        type: 'BATTLESHIP',
+        orientation: ORIENTATION.Vertical,
+        position: { x: 1, y: 2 }
+    },
+    {
+        id: 'ship-cruiser',
+        size: 3,
+        type: 'CARRIER',
+        orientation: ORIENTATION.Horizontal,
+        position: { x: 4, y: 4 }
+    },
+    {
+        id: 'ship-submarine',
+        size: 3,
+        type: 'CARRIER',
+        orientation: ORIENTATION.Vertical,
+        position: { x: 9, y: 5 }
+    },
+    {
+        id: 'ship-submarine-second',
+        size: 3,
+        type: 'SUBMARINE',
+        orientation: ORIENTATION.Vertical,
+        position: { x: 6, y: 6 }
+    },
+    {
+        id: 'ship-destroyer',
+        size: 2,
+        type: 'CARRIER',
+        orientation: ORIENTATION.Horizontal,
+        position: { x: 2, y: 8 }
+    },
+    {
+        id: 'ship-destroyer-second',
+        size: 2,
+        type: 'CARRIER',
+        orientation: ORIENTATION.Horizontal,
+        position: { x: 7, y: 1 }
+    }
+];
 
 var matchID;
 var playerName;
 
 $(document).ready(function() {
 
-    // Fade out the grids before we do anthing else.
-    //$('.battle-grids').css('opacity', '0.3');
-
-    // Create the two grids.
-
-    //TODO: adopt OOP class pattern for grids and ships!
     createBattleGrid('#self', 10, 10);
     createBattleGrid('#opponent', 10, 10);
 
-    // DRAGGABLE STUFF - WIP!
-    /*  $( "#draggable5" ).draggable({ grid: [ 36, 36 ] });
-    var pos = $('#self #cell-0-1').position();
-     $(" #draggable5").css("top", pos.top);
-     $(" #draggable5").css("left", pos.left);*/
+    spawnShips(SHIPS);
 
     /* UI Setup */
 
@@ -50,23 +93,36 @@ $(document).ready(function() {
         return 'Are you sure you want to leave? Your match will be aborted and you cannot return.';
     });
 
-    //TODO: this is ugly!
+    function spawnShips(ships) {
+        ships.forEach(function(ship) {
+            $('.actual-grid').append('<div id=\"' + ship.id + '\" class="ship"></div>');
+            let shipDiv = $('#' + ship.id);
+
+            if(ship.orientation === ORIENTATION.Horizontal) {
+                shipDiv.css('width', ship.size * CELL_SIZE + 'px');
+            } else {
+                shipDiv.css('height', ship.size * CELL_SIZE + 'px');
+            }
+
+            shipDiv.css('left', ship.position.x * CELL_SIZE + 'px').css('top', ship.position.y * CELL_SIZE + 'px');
+        });
+    }
+
+    $( '.ship' ).draggable({
+        grid: [ CELL_SIZE, CELL_SIZE ],
+        containment: '.actual-grid',
+        cursor: 'move',
+        drag: function(event, ui) {
+            var x = ui.position.left / CELL_SIZE;
+            var y = ui.position.top / CELL_SIZE;
+            console.log('being dragged! ' + x + ' ' + y);
+        }
+    });
+
     function createBattleGrid(table, width, height) {
-        if(width > LABEL_COLUMNS.length) {
-            console.error('Game grid cannot be larger than ' + LABEL_COLUMNS.length);
-        }
-
-        // First, draw the labels for the columns
-        var label = '<tr><td class="coord"></td>';
-        for(var l = 0; l < width; ++l) {
-            label += '<td class="coord">' + LABEL_COLUMNS[l] + '</td>';
-        }
-        label += '</tr>';
-        $(table).append(label);
-
         // Next, draw the actual grid and the row numbers
-        for(var y = 1; y <= height; ++y){
-            var row = '<tr><td class="coord">' + y + '</td>';
+        for(var y = 0; y < height; ++y){
+            var row = '<tr>';
             for (var x = 0; x < width; ++x) {
                 row += '<td id="cell-' + x + '-' + y + '"></td>';
             }
@@ -122,6 +178,7 @@ $(document).ready(function() {
         updateStatus('An error occurred: ' + error);
     }
 
+    //todo (tobi): specify method, make POST!
     function send(endpoint, data, callback) {
         $.ajax({
             method: 'GET',

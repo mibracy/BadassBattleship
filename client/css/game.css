@@ -1,6 +1,11 @@
 * {
     font-family: 'Arvo', sans-serif;
 }
+footer {
+    text-align: center;
+    padding: 50px;
+    color: #7a7a7a;
+}
 .game {
     padding-top: 120px;
     display: block;
@@ -12,31 +17,77 @@
 }
 .battle-grid {
     table-layout: fixed;
-    margin: 0px auto;
+    margin: 0 auto;
     float: none;
-    width: 400px;
-    height: 400px;
+    width: 401px;
+    height: 401px;
+    z-index: 5;
+}
+.actual-grid {
+    margin: 0 auto;
+    float: none;
+    width: 401px;
+    height: 401px;
+    position: absolute;
+    background-color: rgba(180, 180, 180, 0.17);
+    left: 85px;
 }
 .battle-grid td {
-    border: thin solid #7a7a7a;
+    border-collapse:collapse;
+    border: 1px solid #7a7a7a;
     text-align: center;
-    vertical-align: center;
-    /* Force sizes - there's definitely a better way for this */
 }
-.battle-grid td:not(.coord):hover {
+.battle-grid td:hover {
     background: red;
 }
-.battle-grid td.coord {
+.labels {
+    height: 25px;
+}
+.labels ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.labels .horizontal {
+    margin: 0 auto;
+    width: 401px;
+}
+.labels .horizontal ul li {
+    float:left;
+    font-size: 11px;
+    width: 40px;
+    color: #7a7a7a;
+}
+.labels .vertical {
+    margin-top: 20px;
+    height: 401px;
+    z-index: 10;
+}.labels .vertical ul {
+    margin-left: 15px;
+}
+.labels .vertical ul li {
+    font-size: 11px;
+    height: 40px;
+    width: 60px;
+    color: #7a7a7a;
+}
+/*.battle-grid td.coord {
     border: none;
     color: #7a7a7a;
     font-size: 11px;
-}
-#draggable5 {
-    width: 36px;
-    height: 72px;
+}*/
+.ship {
+    width: 40px;
+    height: 40px;
     display: block;
+    position: absolute;
     border: thin solid black;
-    background-color: rgba(255, 0, 6, 0.49);
+    background-color: rgba(0, 182, 204, 0.49);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+.ship:active {
+    border: 3px solid #419c44;
 }
 .ui-draggable, .ui-droppable {
     background-position: top;

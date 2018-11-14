@@ -6,10 +6,10 @@
 
 package com.badassbattleship.server;
 
+
 import java.util.UUID;
 
 public class Player {
-
     private String name;
 
     public Player(String name) {

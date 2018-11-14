@@ -6,7 +6,6 @@
 
 package com.badassbattleship.server;
 
-import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;

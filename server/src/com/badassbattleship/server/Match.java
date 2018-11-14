@@ -8,6 +8,7 @@ package com.badassbattleship.server;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Match {
@@ -18,12 +19,12 @@ public class Match {
     private LocalDateTime created;
 
     // We need to make sure we never add more than 2 players. Better data structure for that?
-    private ArrayList<Player> players;
+    private HashMap<String, Player> players;
 
-    private String playerTurn;
+    private String playerTurn; // determine who's turn it is
 
     public Match(UUID id, String playerName) {
-        this.players = new ArrayList<>();
+        this.players = new HashMap<>();
         this.id = id;
         this.status = MatchStatus.READY_BUT_WAITING_OPPONENT;
         this.created = LocalDateTime.now();
@@ -34,21 +35,27 @@ public class Match {
     public Player addPlayer(String playerName) {
         if(players.size() < 2) {
             Player player = new Player(playerName);
-            players.add(player);
 
-            // We are ready for the match to start!
-            start();
+            // Make sure no name duplicates
+            if(!players.containsKey(playerName)) {
+                players.put(playerName, player);
 
-            return player;
+                if (players.size() == 2) {
+                    start();
+                }
+
+                return player;
+            }
         }
         return null;
     }
 
     private void start() {
-        if(players.size() == 2) {
-            this.playerTurn = players.get(0).getName();
-            this.status = MatchStatus.PLAYING;
-        }
+        // First player in players gets the firs turn
+        this.playerTurn = players.entrySet().iterator().next().getKey();
+
+        // Update the status.
+        this.status = MatchStatus.PLAYING;
     }
 
 }

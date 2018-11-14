@@ -3,12 +3,12 @@ package com.badassbattleship.server;
 
 public class Ship {
 	private boolean destroyed;
-	private int size;
+	private ShipType type;
 	private ShipOrientation orientation; // 0 for horizontal 1 for vertical
 	private int hits;
 	
-	public Ship(int size) {
-		this.size = size;
+	public Ship(ShipType type) {
+		this.type = type;
 		this.destroyed = false;
 		this.hits = 0;
 	}
@@ -26,7 +26,7 @@ public class Ship {
 	}
 
 	public void destroyedCheck() {
-		if (hits >= size) {
+		if (hits >= type.getSize()) {
 			setDestroyed();
 		}
 	}
@@ -43,4 +43,22 @@ public class Ship {
 enum ShipOrientation {
 	HORIZONTAL,
 	VERTICAL
+}
+enum ShipType {
+	UNDEFINED(0),
+	CARRIER(5),
+	BATTLESHIP(4),
+	CRUISER(3),
+	SUBMARINE(3),
+	DESTROYER(2);
+
+	private int size;
+
+	ShipType(int size) {
+		this.size = size;
+	}
+
+	public int getSize() {
+		return size;
+	}
 }
