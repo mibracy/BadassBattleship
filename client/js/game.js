@@ -79,6 +79,8 @@ $(document).ready(function() {
 
     /* UI Setup */
 
+    $('#end-match-bar').hide();
+
     // Generate random player name
     $('#player-name').val('player' + $.now());
 
@@ -139,7 +141,9 @@ $(document).ready(function() {
                 matchID = response.id;
                 playerName = name;
 
-                $('#match-id').val(matchID).select();
+                showCancelMatchbar();
+
+                $('#current-match-id').val(matchID).select();
 
                 update();
                 setInterval(update, REFRESH_RATE);
@@ -154,13 +158,22 @@ $(document).ready(function() {
                 matchID = response.id;
                 playerName = name;
 
+                showCancelMatchbar();
+                $('#current-match-id').hide();
+
                 update();
                 setInterval(update, REFRESH_RATE);
             });
         }
     }
 
+    function showCancelMatchbar() {
+        $('#end-match-bar').show();
+        $('#match-bar').hide();
+    }
+
     function update() {
+
         // Need to get info about match.
         send('match/status', {'id': matchID }, function (response) {
            updateStatus('Status: <strong>' + response.status + '</strong>');
@@ -192,6 +205,8 @@ $(document).ready(function() {
             },
             success: callback
         }).fail(function (jqXHR, textStatus, errorThrown) {
+            $('#end-match-bar').hide();
+            $('#match-bar').show();
             errorStatus(errorThrown);
         });
     }

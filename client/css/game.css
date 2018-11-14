@@ -92,6 +92,6 @@ footer {
 .ui-draggable, .ui-droppable {
     background-position: top;
 }
-#match-bar * {
+#match-bar, #end-match-bar * {
     margin-left: 5px;
 }
