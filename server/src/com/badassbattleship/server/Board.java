@@ -14,16 +14,20 @@ public class Board {
 			aliveShips++;
 
 			int size = ship.getSize();
+			Position pos = ship.getStartPosition();
 			ShipOrientation orientation = ship.getOrientation();
 			
 			//set ship to all gridspaces with battleship
+
+			//todo: instead of directly adding a ship object to a gridspace, just add the ID of the ship!!
+
 			if (size == 2 && orientation == ShipOrientation.HORIZONTAL) {
-				grid[row][col].setShip(battleship);
-				grid[row][col + 1].setShip(battleship);
+				grid[pos.getX()][pos.getY()].setShip(ship);
+				grid[pos.getX()][pos.getY()].setShip(ship);
 			}
 			if (size == 2 && orientation == ShipOrientation.VERTICAL) {
-				grid[row][col].setShip(battleship);
-				grid[row - 1][col].setShip(battleship);
+				grid[pos.getX()][pos.getY()].setShip(ship);
+				grid[pos.getX() - 1][pos.getY()].setShip(ship);
 			}
 			
 		}
