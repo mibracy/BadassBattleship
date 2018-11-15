@@ -57,8 +57,7 @@ public class MatchController {
             Player firstPlayer = newMatch.addPlayer(playerName);
 
             if(firstPlayer != null) {
-                firstPlayer.setBoard(BoardController.getInstance().createBoardFromJSON(shipsJSON));
-
+                firstPlayer.setBoard(BoardFactory.getInstance().fromJSON(shipsJSON));
                 matches.put(matchID, newMatch);
 
                 logger.info("Created new match with ID {} and player, board named {}", matchID, playerName);
@@ -88,14 +87,17 @@ public class MatchController {
 
             if (matches.containsKey(matchID)) {
                 Match match = matches.get(matchID);
-                Player player = match.addPlayer(playerName);
 
-                // We can actually join
-                if (player != null) {
-                    player.setBoard(BoardController.getInstance().createBoardFromJSON(shipsJSON));
+                if(match.getStatus() == MatchStatus.READY_BUT_WAITING_OPPONENT) {
+                    Player player = match.addPlayer(playerName);
 
-                    logger.info("Added player, board {} to {}!", playerName, matchID);
-                    return match;
+                    // We can actually join
+                    if (player != null) {
+                        player.setBoard(BoardFactory.getInstance().fromJSON(shipsJSON));
+
+                        logger.info("Added player, board {} to {}!", playerName, matchID);
+                        return match;
+                    }
                 }
 
                 // Match is full

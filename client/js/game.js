@@ -19,49 +19,42 @@ var ships = [
     {
         id: 'ship-carrier',
         size: 5,
-        type: 'CARRIER',
         orientation: ORIENTATION.Horizontal,
-        position: { x: 1, y: 0 },
+        position: { x: 0, y: 0 },
     },
     {
         id: 'ship-battleship',
         size: 4,
-        type: 'BATTLESHIP',
         orientation: ORIENTATION.Vertical,
         position: { x: 1, y: 2 }
     },
     {
         id: 'ship-cruiser',
         size: 3,
-        type: 'CARRIER',
         orientation: ORIENTATION.Horizontal,
         position: { x: 4, y: 4 }
     },
     {
         id: 'ship-submarine',
         size: 3,
-        type: 'CARRIER',
         orientation: ORIENTATION.Vertical,
         position: { x: 9, y: 5 }
     },
     {
         id: 'ship-submarine-second',
         size: 3,
-        type: 'SUBMARINE',
         orientation: ORIENTATION.Vertical,
         position: { x: 6, y: 6 }
     },
     {
         id: 'ship-destroyer',
         size: 2,
-        type: 'CARRIER',
         orientation: ORIENTATION.Horizontal,
         position: { x: 2, y: 8 }
     },
     {
         id: 'ship-destroyer-second',
         size: 2,
-        type: 'CARRIER',
         orientation: ORIENTATION.Horizontal,
         position: { x: 7, y: 1 }
     }
@@ -114,7 +107,7 @@ $(document).ready(function() {
 
     var prevOffset, curOffset;
 
-    $( '.ship' ).draggable({
+    $('.ship').draggable({
         grid: [ CELL_SIZE, CELL_SIZE ],
         containment: '.actual-grid',
         cursor: 'move',

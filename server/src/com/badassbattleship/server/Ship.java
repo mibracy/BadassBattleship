@@ -1,34 +1,24 @@
 package com.badassbattleship.server;
 
 
+import com.google.gson.annotations.SerializedName;
+
 public class Ship {
-	private boolean destroyed;
-	private ShipType type;
+	private int size;
 	private ShipOrientation orientation; // 0 for horizontal 1 for vertical
-	private int hits;
+
+	private Position position; // Used for serialization - changing this does not change position on board!
 	
-	public Ship(ShipType type) {
-		this.type = type;
-		this.destroyed = false;
-		this.hits = 0;
-	}
-	
-	public void hit() {
-		this.hits++;
+	public Ship(int size) {
+		this.size = size;
 	}
 
-	public boolean isDestroyed() {
-		return destroyed;
-	}
-	
-	private void setDestroyed() {
-		this.destroyed = true;
+	public int getSize() {
+		return size;
 	}
 
-	public void destroyedCheck() {
-		if (hits >= type.getSize()) {
-			setDestroyed();
-		}
+	public Position getStartPosition() {
+		return position;
 	}
 
 	public ShipOrientation getOrientation() {
@@ -41,24 +31,16 @@ public class Ship {
 
 }
 enum ShipOrientation {
+	@SerializedName("0")
 	HORIZONTAL,
+	@SerializedName("1")
 	VERTICAL
 }
-enum ShipType {
-	UNDEFINED(0),
-	CARRIER(5),
-	BATTLESHIP(4),
-	CRUISER(3),
-	SUBMARINE(3),
-	DESTROYER(2);
-
-	private int size;
-
-	ShipType(int size) {
-		this.size = size;
-	}
-
-	public int getSize() {
-		return size;
+class Position {
+	private int x;
+	private int y;
+	public int getX() { return x; }
+	public int getY() {
+		return y;
 	}
 }

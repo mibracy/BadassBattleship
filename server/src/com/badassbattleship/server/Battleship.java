@@ -15,9 +15,11 @@ import spark.Filter;
 
 public class Battleship {
 
+	// JSON parser for this project
+	public static Gson gson = new Gson();
+
 	public static void main(String[] args) {
 		// JSON renderer
-		Gson gson = new Gson();
 
 		// we can get rid of this later, it's just for testing and allowing CORS
 		after((Filter) (request, response) -> {
