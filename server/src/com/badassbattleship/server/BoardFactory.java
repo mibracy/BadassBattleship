@@ -5,15 +5,17 @@ import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+
 /**
  * Validates and creates game boards.
  */
 public class BoardFactory {
-    private static Logger logger = LoggerFactory.getLogger(MatchController.class);
+    private static Logger logger = LoggerFactory.getLogger(BoardFactory.class);
     private static BoardFactory instance = null;
 
     private BoardFactory() {
-        logger.info("Board controller has started.");
+        logger.info("Board factory has started.");
     }
 
     public static BoardFactory getInstance() {
@@ -27,10 +29,14 @@ public class BoardFactory {
         logger.info("Validating and creating board from JSON... ");
 
         Board board = new Board();
-
         Ship[] ships = Battleship.gson.fromJson(json, Ship[].class);
 
+        //TODO: make sure that no repeated ships or invalid num ships are added! (michael or eric?)
+
         for(Ship ship : ships) {
+            System.out.printf("Request for new ship at %d %d and size %d and orientation %s%n",
+                    ship.getStartPosition().getX(), ship.getStartPosition().getY(),
+                    ship.getSize(), ship.getOrientation().toString());
            board.createShip(ship);
         }
 

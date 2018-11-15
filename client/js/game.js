@@ -9,7 +9,7 @@ const BASE_URL = "http://localhost:4567/api/";
 
 const MAX_PLAYER_NAME_LENGTH = 20;
 
-const CELL_SIZE = 40; //if you modify this, it needs to be changed in the CSS
+const CELL_SIZE = 40;
 
 const REFRESH_RATE = 1000;
 

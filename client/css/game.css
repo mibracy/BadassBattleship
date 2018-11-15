@@ -1,6 +1,9 @@
 * {
     font-family: 'Arvo', sans-serif;
 }
+.navbar button {
+    margin: 0 15px 0 5px;
+}
 footer {
     text-align: center;
     padding: 50px;

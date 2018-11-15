@@ -11,7 +11,9 @@ public class Player {
     private Board board;
 
     public Player(String name) throws Exception {
-        if(name.length() > 20 || name.isEmpty()) throw new Exception("Name longer than 20 or empty.");
+        if(name.length() > GameSettings.NAME_MAX_LENGTH || name.isEmpty()) {
+            throw new Exception(String.format("Name longer than %d or empty.", GameSettings.NAME_MAX_LENGTH));
+        }
         this.name = name;
     }
 

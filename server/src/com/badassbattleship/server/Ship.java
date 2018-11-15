@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 public class Ship {
 	private int size;
 	private ShipOrientation orientation; // 0 for horizontal 1 for vertical
-
 	private Position position; // Used for serialization - changing this does not change position on board!
 	
 	public Ship(int size) {
@@ -28,8 +27,8 @@ public class Ship {
 	public void setOrientation(ShipOrientation orientation) {
 		this.orientation = orientation;
 	}
-
 }
+
 enum ShipOrientation {
 	@SerializedName("0")
 	HORIZONTAL,

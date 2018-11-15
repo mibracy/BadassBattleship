@@ -17,8 +17,6 @@ import java.util.UUID;
 /**
  * Singleton controller that allows for managing matches through the API.
  */
-
-//todo: there is still a lot of repeated code for match and player checking logic, clean this up!
 public class MatchController {
 
     private static Logger logger = LoggerFactory.getLogger(MatchController.class);
@@ -101,9 +99,9 @@ public class MatchController {
                 }
 
                 // Match is full
-                logger.error("Could not add player, board {} to match ID {} (match full).",
+                logger.error("Could not add player, board {} to match ID {} (match full or invalid status).",
                         playerName, matchID);
-                return ServerUtil.errorResponse(res, "Match full.");
+                return ServerUtil.errorResponse(res, "Match full/invalid match status.");
             }
         } catch(Exception ex) {
             logger.error("Player {} in {} error occurred: {}",
