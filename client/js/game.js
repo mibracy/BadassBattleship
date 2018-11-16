@@ -2,7 +2,7 @@
  * Author: Tobi Schweiger <tschwei@siue.edu>
  *
  *     game.js takes care of rendering and interacting with the battleship grids
- *     and communicating with the server.
+ *     and communicating with the server. This code could be a lot better.
  */
 
 const BASE_URL = "http://localhost:4567/api/";
@@ -154,6 +154,8 @@ $(document).ready(function() {
         var name = validateName();
         if(name !== '') {
             send('match/new', {'name': name, 'ships': JSON.stringify(ships)}, function (response) {
+                console.log(JSON.stringify(ships));
+
                 matchID = response.id;
                 playerName = name;
 

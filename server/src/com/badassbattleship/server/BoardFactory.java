@@ -40,6 +40,8 @@ public class BoardFactory {
            board.createShip(ship);
         }
 
+        System.out.println(board);
+
         return board;
     }
 
