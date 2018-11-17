@@ -40,8 +40,8 @@ public class Board {
 		switch(orient) {
 			case HORIZONTAL:
 				for (int i = 0; i < size; i++) {
-					if (grid[pos.getX() + i][pos.getY()] == -1) {
-						grid[pos.getX() + i][pos.getY()] = id;
+					if (grid[pos.getY()][pos.getX() + i] == -1) {
+						grid[pos.getY()][pos.getX() + i] = id;
 					} else {
 						throw new Exception("Invalid placement");
 					}
@@ -49,8 +49,8 @@ public class Board {
 				break;
 			case VERTICAL:
 				for (int i = 0; i < size; i++) {
-					if (grid[pos.getX()][pos.getY() + i] == -1) {
-						grid[pos.getX()][pos.getY() + i] = id;
+					if (grid[pos.getY() + i][pos.getX()] == -1) {
+						grid[pos.getY() + i][pos.getX()] = id;
 					} else {
 						throw new Exception("Invalid placement");
 					}
