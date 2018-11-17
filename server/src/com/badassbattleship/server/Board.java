@@ -66,7 +66,7 @@ public class Board {
 			for (int j = 0; j < GameSettings.SIZE; j++) {
 				System.out.print("[" +grid[i][j] + "] ");
 			}
-			System.out.print("/n");
+			System.out.println();
 		}
 		
 	}
