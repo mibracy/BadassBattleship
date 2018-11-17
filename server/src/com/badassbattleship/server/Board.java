@@ -27,9 +27,8 @@ public class Board {
 			int size = ship.getSize();
 			Position pos = ship.getStartPosition();
 			ShipOrientation orient = ship.getOrientation();
-			
 	
-			// Save the ship.
+			// Save the ship. Will throw on error.
 			ships.put(id, ship);
 			
 			placeShip(id, size, pos, orient);
@@ -37,29 +36,18 @@ public class Board {
 		}
 	}
 	
-	public void placeShip(int id, int size, Position pos, ShipOrientation orient) {
+	public void placeShip(int id, int size, Position pos, ShipOrientation orient) throws ArrayIndexOutOfBoundsException {
 		switch(orient) {
 			case HORIZONTAL:
 				for (int i = 0; i < size; i++) {
-					try {
-						if (grid[pos.getX() + i][pos.getY()] == -1) {
-							grid[pos.getX() + i][pos.getY()] = id;
-						}
-					}
-					catch (ArrayIndexOutOfBoundsException e) {
-						// throw whatever exception we decide later
-					}
+					if (grid[pos.getX() + i][pos.getY()] == -1) {
+						grid[pos.getX() + i][pos.getY()] = id; }
 				}
 				break;
 			case VERTICAL:
 				for (int i = 0; i < size; i++) {
-					try {
-						if (grid[pos.getX()][pos.getY() + i] == -1) {
-							grid[pos.getX()][pos.getY() + i] = id;
-						}
-					}
-					catch (ArrayIndexOutOfBoundsException e) {
-						// throw whatever exception we decide later
+					if (grid[pos.getX()][pos.getY() + i] == -1) {
+						grid[pos.getX()][pos.getY() + i] = id;
 					}
 				}
 				break;
