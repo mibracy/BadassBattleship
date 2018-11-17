@@ -38,21 +38,56 @@ public class Board {
 	}
 	
 	public void placeShip(int id, int size, Position pos, ShipOrientation orient) {
+		if (verifyPlacement(id,size,pos,orient) == true) {
+			switch(orient) {
+				case HORIZONTAL:
+					for (int i = 0; i < size; i++) {
+						grid[pos.getX() + i][pos.getY()] = id;
+					}
+					break;
+				case VERTICAL:
+					for (int i = 0; i < size; i++) {
+						grid[pos.getX()][pos.getY() + i] = id;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+
+	}
+	
+	public boolean verifyPlacement(int id, int size, Position pos, ShipOrientation orient) {
 		switch(orient) {
 			case HORIZONTAL:
 				for (int i = 0; i < size; i++) {
-					grid[pos.getX() + i][pos.getY()] = id;
+					try {
+						if (grid[pos.getX() + i][pos.getY()] != -1) {
+							return false;
+						}
+					}
+					catch (ArrayIndexOutOfBoundsException e) {
+						return false;
+					}
 				}
 				break;
 			case VERTICAL:
 				for (int i = 0; i < size; i++) {
-					grid[pos.getX()][pos.getY() + i] = id;
+					try {
+						if (grid[pos.getX()][pos.getY() + i] != -1) {
+							return false;
+						}
+					}
+					catch (ArrayIndexOutOfBoundsException e) {
+						return false;
+					}
 				}
 				break;
 			default:
 				break;
+		}	
 		
-		}
+		return true;
 	}
 
 }
