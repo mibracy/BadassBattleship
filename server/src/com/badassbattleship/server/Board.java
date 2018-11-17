@@ -24,37 +24,39 @@ public class Board {
 	public void createShip(Ship ship) throws Exception {
 		if (aliveShips < GameSettings.NUM_SHIPS) {
 			int id = aliveShips++;
-
-			// Save the ship.
-			ships.put(id, ship);
-
 			int size = ship.getSize();
 			Position pos = ship.getStartPosition();
 			ShipOrientation orient = ship.getOrientation();
 			
-			placeShip(id, size, pos, orient);
+			if (verifyPlacement(id,size,pos,orient) == true) {
+				// Save the ship.
+				ships.put(id, ship);
+				
+				placeShip(id, size, pos, orient);
+			}
+			else {
+				aliveShips--;
+			}
+			
 
 		}
 	}
 	
 	public void placeShip(int id, int size, Position pos, ShipOrientation orient) {
-		if (verifyPlacement(id,size,pos,orient) == true) {
-			switch(orient) {
-				case HORIZONTAL:
-					for (int i = 0; i < size; i++) {
-						grid[pos.getX() + i][pos.getY()] = id;
-					}
-					break;
-				case VERTICAL:
-					for (int i = 0; i < size; i++) {
-						grid[pos.getX()][pos.getY() + i] = id;
-					}
-					break;
-				default:
-					break;
-			}
+		switch(orient) {
+			case HORIZONTAL:
+				for (int i = 0; i < size; i++) {
+					grid[pos.getX() + i][pos.getY()] = id;
+				}
+				break;
+			case VERTICAL:
+				for (int i = 0; i < size; i++) {
+					grid[pos.getX()][pos.getY() + i] = id;
+				}
+				break;
+			default:
+				break;
 		}
-
 	}
 	
 	public boolean verifyPlacement(int id, int size, Position pos, ShipOrientation orient) {
