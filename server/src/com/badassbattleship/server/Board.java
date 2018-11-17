@@ -28,17 +28,12 @@ public class Board {
 			Position pos = ship.getStartPosition();
 			ShipOrientation orient = ship.getOrientation();
 			
-			if (verifyPlacement(id,size,pos,orient) == true) {
-				// Save the ship.
-				ships.put(id, ship);
-				
-				placeShip(id, size, pos, orient);
-			}
-			else {
-				aliveShips--;
-			}
+	
+			// Save the ship.
+			ships.put(id, ship);
 			
-
+			placeShip(id, size, pos, orient);
+			
 		}
 	}
 	
@@ -46,50 +41,31 @@ public class Board {
 		switch(orient) {
 			case HORIZONTAL:
 				for (int i = 0; i < size; i++) {
-					grid[pos.getX() + i][pos.getY()] = id;
+					try {
+						if (grid[pos.getX() + i][pos.getY()] == -1) {
+							grid[pos.getX() + i][pos.getY()] = id;
+						}
+					}
+					catch (ArrayIndexOutOfBoundsException e) {
+						// throw whatever exception we decide later
+					}
 				}
 				break;
 			case VERTICAL:
 				for (int i = 0; i < size; i++) {
-					grid[pos.getX()][pos.getY() + i] = id;
+					try {
+						if (grid[pos.getX()][pos.getY() + i] == -1) {
+							grid[pos.getX()][pos.getY() + i] = id;
+						}
+					}
+					catch (ArrayIndexOutOfBoundsException e) {
+						// throw whatever exception we decide later
+					}
 				}
 				break;
 			default:
 				break;
 		}
-	}
-	
-	public boolean verifyPlacement(int id, int size, Position pos, ShipOrientation orient) {
-		switch(orient) {
-			case HORIZONTAL:
-				for (int i = 0; i < size; i++) {
-					try {
-						if (grid[pos.getX() + i][pos.getY()] != -1) {
-							return false;
-						}
-					}
-					catch (ArrayIndexOutOfBoundsException e) {
-						return false;
-					}
-				}
-				break;
-			case VERTICAL:
-				for (int i = 0; i < size; i++) {
-					try {
-						if (grid[pos.getX()][pos.getY() + i] != -1) {
-							return false;
-						}
-					}
-					catch (ArrayIndexOutOfBoundsException e) {
-						return false;
-					}
-				}
-				break;
-			default:
-				break;
-		}	
-		
-		return true;
 	}
 
 }
