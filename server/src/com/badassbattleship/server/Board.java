@@ -60,5 +60,15 @@ public class Board {
 				break;
 		}
 	}
+	
+	public void printGridToConsole() {
+		for (int i = 0; i < GameSettings.SIZE; i++) {
+			for (int j = 0; j < GameSettings.SIZE; j++) {
+				System.out.print("[" +grid[i][j] + "] ");
+			}
+			System.out.print("/n");
+		}
+		
+	}
 
 }
