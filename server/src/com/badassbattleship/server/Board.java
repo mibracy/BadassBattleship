@@ -30,9 +30,28 @@ public class Board {
 
 			int size = ship.getSize();
 			Position pos = ship.getStartPosition();
-			ShipOrientation orientation = ship.getOrientation();
+			ShipOrientation orient = ship.getOrientation();
+			
+			placeShip(id, size, pos, orient);
 
-
+		}
+	}
+	
+	public void placeShip(int id, int size, Position pos, ShipOrientation orient) {
+		switch(orient) {
+			case HORIZONTAL:
+				for (int i = 0; i < size; i++) {
+					grid[pos.getX() + i][pos.getY()] = id;
+				}
+				break;
+			case VERTICAL:
+				for (int i = 0; i < size; i++) {
+					grid[pos.getX()][pos.getY() + i] = id;
+				}
+				break;
+			default:
+				break;
+		
 		}
 	}
 
