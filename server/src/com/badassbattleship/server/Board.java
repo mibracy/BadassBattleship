@@ -28,26 +28,31 @@ public class Board {
 			Position pos = ship.getStartPosition();
 			ShipOrientation orient = ship.getOrientation();
 	
-			// Save the ship. Will throw on error.
+			// Save the ship.
 			ships.put(id, ship);
-			
+
+			// This will throw on invalid placement.
 			placeShip(id, size, pos, orient);
-			
 		}
 	}
 	
-	public void placeShip(int id, int size, Position pos, ShipOrientation orient) throws ArrayIndexOutOfBoundsException {
+	public void placeShip(int id, int size, Position pos, ShipOrientation orient) throws Exception {
 		switch(orient) {
 			case HORIZONTAL:
 				for (int i = 0; i < size; i++) {
 					if (grid[pos.getX() + i][pos.getY()] == -1) {
-						grid[pos.getX() + i][pos.getY()] = id; }
+						grid[pos.getX() + i][pos.getY()] = id;
+					} else {
+						throw new Exception("Invalid placement");
+					}
 				}
 				break;
 			case VERTICAL:
 				for (int i = 0; i < size; i++) {
 					if (grid[pos.getX()][pos.getY() + i] == -1) {
 						grid[pos.getX()][pos.getY() + i] = id;
+					} else {
+						throw new Exception("Invalid placement");
 					}
 				}
 				break;
