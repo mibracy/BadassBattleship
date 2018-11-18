@@ -62,7 +62,7 @@ var ships = [
 
 var matchID;
 var playerName;
-var myTurn;
+var myTurn = false;
 
 $(document).ready(function() {
 
@@ -72,6 +72,8 @@ $(document).ready(function() {
     spawnShips();
 
     /* UI Setup */
+
+    $('#opponent').css('opacity', '0.25');
 
     $('#end-match-bar').hide();
 
@@ -83,13 +85,6 @@ $(document).ready(function() {
 
     // Join Match Button
     $('#join-match').click(function() { joinMatch($('#match-id').val()) });
-
-    // Show warning and cleanup before players try to leave
-    $(window).bind('beforeunload', function(){
-        return 'Are you sure you want to leave? Your match will be aborted and you cannot return.';
-    });
-
-    // TODO: separate all of this into separate OOP objects, bit of a mess right now!
 
     function spawnShips() {
         ships.forEach(function(ship) {
@@ -106,6 +101,7 @@ $(document).ready(function() {
         });
     }
 
+    //todo: clean up
     var prevOffset, curOffset;
 
     $('.ship').draggable({
@@ -169,6 +165,12 @@ $(document).ready(function() {
         }
     }
 
+    $('#opponent td').click(function(event) {
+        if(myTurn) {
+            console.log('hit cell ' + event.target.id);
+        }
+    });
+
     function joinMatch(id) {
         var name = validateName();
         if(name !== '' && id !== '') {
@@ -203,7 +205,9 @@ $(document).ready(function() {
            updateStatus('Status: <strong>' + response.status + '</strong>');
            if(response.status === 'PLAYING') {
                myTurn = response.playerTurn === playerName;
-               updateStatus(myTurn ? 'Your turn' : 'Opponent turn');
+               updateStatus(myTurn ? 'Your turn: Try to hit the opponent\'s ships!' : 'Opponent turn: Watch out!');
+
+               $('#opponent').css('opacity', myTurn ? '1' : '0.25');
            }
         });
     }

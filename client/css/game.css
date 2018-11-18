@@ -25,6 +25,7 @@ footer {
     width: 401px;
     height: 401px;
     z-index: 5;
+    background-color: #efefef;
 }
 .actual-grid {
     margin: 0 auto;
@@ -32,7 +33,6 @@ footer {
     width: 401px;
     height: 401px;
     position: absolute;
-    background-color: rgba(180, 180, 180, 0.17);
     left: 85px;
 }
 .battle-grid td {
@@ -41,7 +41,10 @@ footer {
     text-align: center;
 }
 .battle-grid td:hover {
-    background: red;
+    background: rgba(255, 0, 8, 0.64);
+    border: 1px solid red;
+    box-shadow: 1px 1px 5px red;
+    cursor: crosshair;
 }
 .labels {
     height: 25px;
