@@ -62,6 +62,7 @@ var ships = [
 
 var matchID;
 var playerName;
+var myTurn;
 
 $(document).ready(function() {
 
@@ -201,7 +202,8 @@ $(document).ready(function() {
         send('match/status', {'id': matchID }, function (response) {
            updateStatus('Status: <strong>' + response.status + '</strong>');
            if(response.status === 'PLAYING') {
-               updateStatus((response.playerTurn === playerName ? 'Your turn' : 'Opponent turn'));
+               myTurn = response.playerTurn === playerName;
+               updateStatus(myTurn ? 'Your turn' : 'Opponent turn');
            }
         });
     }
