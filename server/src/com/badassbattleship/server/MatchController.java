@@ -133,14 +133,19 @@ public class MatchController {
         return ServerUtil.errorResponse(res, "Invalid match.");
     }
 
-    /**
-     * Responds to route to leave a match.
-     * @param req
-     * @param res
-     * @return
-     */
-    public String leaveMatch(Request req, Response res) {
-        return "not implemented";
+    //Todo: issue here is that anyone could send a leave match message if they know the username.
+    // So maybe it is time to switch to user IDs instead?
+    public Object leaveMatch(Request req, Response res) {
+        try {
+            UUID matchID = UUID.fromString(req.queryParams("id"));
+
+
+        } catch(IllegalArgumentException ex) {
+            logger.error("{} is not a valid match ID (illegal argument exception).",
+                    req.queryParams("id"));
+        }
+
+        return ServerUtil.errorResponse(res, "Invalid match.");
     }
 
 }

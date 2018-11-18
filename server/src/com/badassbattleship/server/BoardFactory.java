@@ -34,9 +34,6 @@ public class BoardFactory {
         //TODO: make sure that no repeated ships or invalid num ships are added! (michael or eric?)
 
         for(Ship ship : ships) {
-            System.out.printf("Request for new ship at %d %d and size %d and orientation %s%n",
-                    ship.getStartPosition().getX(), ship.getStartPosition().getY(),
-                    ship.getSize(), ship.getOrientation().toString());
            board.createShip(ship);
         }
 

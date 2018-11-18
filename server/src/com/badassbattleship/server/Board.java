@@ -1,8 +1,13 @@
 package com.badassbattleship.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 
 public class Board {
+	private static Logger logger = LoggerFactory.getLogger(Board.class);
+
 	private int grid[][];
 	private HashMap<Integer, Ship> ships;
 
@@ -63,12 +68,12 @@ public class Board {
 	
 	public void printGridToConsole() {
 		for (int i = 0; i < GameSettings.SIZE; i++) {
+			StringBuilder row = new StringBuilder();
 			for (int j = 0; j < GameSettings.SIZE; j++) {
-				System.out.printf("[%2d]", grid[i][j]);
+				row.append(String.format("[%2d]", grid[i][j]));
 			}
-			System.out.println();
+			logger.info(row + "\n");
 		}
-		
 	}
 
 }
