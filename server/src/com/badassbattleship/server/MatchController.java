@@ -52,18 +52,18 @@ public class MatchController {
 
         try {
             Match newMatch = new Match(matchID);
-            Player firstPlayer = newMatch.addPlayer(playerName);
+            Player player = newMatch.addPlayer(playerName);
 
-            if(firstPlayer != null) {
-                firstPlayer.setBoard(BoardFactory.getInstance().fromJSON(shipsJSON));
+            if(player != null) {
+                player.setBoard(BoardFactory.getInstance().fromJSON(shipsJSON));
                 matches.put(matchID, newMatch);
 
-                logger.info("Created new match with ID {} and player, board named {}", matchID, playerName);
+                logger.info("Created new match with ID {} and player ({}), board named {}", matchID, player.getId(), playerName);
 
                 return newMatch;
             }
-        } catch(Exception ex) {
-            logger.error("Player {} in {} error occurred: {}",
+       } catch(Exception ex) {
+           logger.error("Player {} in {} error occurred: {}",
                     playerName, matchID, ex.getMessage());
         }
 
@@ -93,7 +93,7 @@ public class MatchController {
                     if (player != null) {
                         player.setBoard(BoardFactory.getInstance().fromJSON(shipsJSON));
 
-                        logger.info("Added player, board {} to {}!", playerName, matchID);
+                        logger.info("Added player ({}), board {} to match {}!", player.getId(), playerName, matchID);
                         return match;
                     }
                 }
@@ -123,6 +123,12 @@ public class MatchController {
 
             if (matches.containsKey(matchID)) {
                 Match match = matches.get(matchID);
+
+                // Hide the new player IDs, to prevent cheating
+                if(match.getNewPlayerId() != null) {
+                    match.hideNewPlayerId();
+                }
+
                 return match;
             }
         } catch(IllegalArgumentException ex) {
@@ -133,8 +139,6 @@ public class MatchController {
         return ServerUtil.errorResponse(res, "Invalid match.");
     }
 
-    //Todo: issue here is that anyone could send a leave match message if they know the username.
-    // So maybe it is time to switch to user IDs instead?
     public Object leaveMatch(Request req, Response res) {
         try {
             UUID matchID = UUID.fromString(req.queryParams("id"));

@@ -6,6 +6,8 @@
 
 package com.badassbattleship.server;
 
+import com.google.gson.annotations.Expose;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,15 +15,22 @@ import java.util.UUID;
 
 public class Match {
 
+    @Expose
     private UUID id;
 
+    @Expose
     private MatchStatus status;
+
+    @Expose
+    private UUID turn; // TODO: this could probably be cleaned up into some local boolean logic!
+
+    @Expose
+    private UUID newPlayerId;
+
     private LocalDateTime created;
 
     // We need to make sure we never add more than 2 players. Better data structure for that?
-    private HashMap<String, Player> players;
-
-    private String playerTurn; // determine who's turn it is
+    private HashMap<UUID, Player> players;
 
     public Match(UUID id) {
         this.players = new HashMap<>();
@@ -36,7 +45,9 @@ public class Match {
 
             // Make sure no name duplicates
             if(!players.containsKey(playerName)) {
-                players.put(playerName, player);
+                players.put(player.getId(), player);
+
+                this.newPlayerId = player.getId();
 
                 if (players.size() == 2) {
                     start();
@@ -49,15 +60,23 @@ public class Match {
     }
 
     private void start() {
-        // First player in players gets the firs turn
-        this.playerTurn = players.entrySet().iterator().next().getKey();
+        // Assign current turn
+        this.turn = (UUID)players.keySet().toArray()[0];
 
         // Update the status.
         this.status = MatchStatus.PLAYING;
     }
 
-    public String getPlayerTurn() {
-        return playerTurn;
+    public UUID getNewPlayerId() {
+        return newPlayerId;
+    }
+
+    public void hideNewPlayerId() {
+        this.newPlayerId = null;
+    }
+
+    public UUID getTurn() {
+        return turn;
     }
 
     public MatchStatus getStatus() {

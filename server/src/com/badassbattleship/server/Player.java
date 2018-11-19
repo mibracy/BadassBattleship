@@ -6,7 +6,10 @@
 
 package com.badassbattleship.server;
 
+import java.util.UUID;
+
 public class Player {
+    private UUID id;
     private String name;
     private Board board;
 
@@ -14,6 +17,7 @@ public class Player {
         if(name.length() > GameSettings.NAME_MAX_LENGTH || name.isEmpty()) {
             throw new Exception(String.format("Name longer than %d or empty.", GameSettings.NAME_MAX_LENGTH));
         }
+        this.id = UUID.randomUUID();
         this.name = name;
     }
 
@@ -28,5 +32,7 @@ public class Player {
     public String getName() {
         return name;
     }
+
+    public UUID getId() { return id;}
 
 }

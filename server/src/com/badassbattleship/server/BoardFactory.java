@@ -29,11 +29,13 @@ public class BoardFactory {
         logger.info("Validating and creating board from JSON... ");
 
         Board board = new Board();
+
         Ship[] ships = Battleship.gson.fromJson(json, Ship[].class);
 
         //TODO: make sure that no repeated ships or invalid num ships are added! (michael or eric?)
 
         for(Ship ship : ships) {
+           logger.info("Adding ship... " + ship.getStartPosition().getX() + ", " + ship.getStartPosition().getY());
            board.createShip(ship);
         }
 

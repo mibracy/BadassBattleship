@@ -10,13 +10,18 @@ package com.badassbattleship.server;
 
 import static spark.Spark.*;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import spark.Filter;
 
 public class Battleship {
 
 	// JSON parser for this project
-	public static Gson gson = new Gson();
+	public static Gson gson = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setPrettyPrinting().create();
 
 	public static void main(String[] args) {
 		// JSON renderer
@@ -25,6 +30,7 @@ public class Battleship {
 		after((Filter) (request, response) -> {
 			response.header("Access-Control-Allow-Origin", "*");
 			response.header("Access-Control-Allow-Methods", "GET,POST");
+			response.type("application/json");
 		});
 
 		// Todo (Tobi): turn these into POSTs!

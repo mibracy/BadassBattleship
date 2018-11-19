@@ -5,6 +5,8 @@
  *     and communicating with the server. This code could be a lot better.
  */
 
+//todo: i hate how jquery is just mixed in with normal JS here, so I REALLY want to clean up this entire file
+
 const BASE_URL = "http://localhost:4567/api/";
 
 const MAX_PLAYER_NAME_LENGTH = 20;
@@ -60,8 +62,9 @@ var ships = [
     }
 ];
 
+// --- GAME VARIABLES ---
 var matchID;
-var playerName;
+var playerID;
 var myTurn = false;
 
 $(document).ready(function() {
@@ -129,9 +132,6 @@ $(document).ready(function() {
             ui.helper.offset(curOffset = prevOffset).trigger('mouseup');
         },
         tolerance: 'touch'
-    }).dblclick(function(event) {
-        //console.log(event.target);
-        //$(event.target).css('transform', 'rotate(90deg)');
     });
 
     function createBattleGrid(table, width, height) {
@@ -150,11 +150,13 @@ $(document).ready(function() {
     function newMatch() {
         var name = validateName();
         if(name !== '') {
+            //todo: instead of sending json of all ships, try to minimize that string!
+            //i.e. agree on format, ex: 0,0,1,3,... (ship x: 0 y: 0 orientation 1: size 3)
             send('match/new', {'name': name, 'ships': JSON.stringify(ships)}, function (response) {
                 console.log(JSON.stringify(ships));
 
                 matchID = response.id;
-                playerName = name;
+                playerID = response.new_player_id;
 
                 showCancelMatchbar();
 
@@ -165,18 +167,12 @@ $(document).ready(function() {
         }
     }
 
-    $('#opponent td').click(function(event) {
-        if(myTurn) {
-            console.log('hit cell ' + event.target.id);
-        }
-    });
-
     function joinMatch(id) {
         var name = validateName();
         if(name !== '' && id !== '') {
             send('match/join', {'id': id, 'name': name, 'ships': JSON.stringify(ships)}, function (response) {
                 matchID = response.id;
-                playerName = name;
+                playerID = response.new_player_id;
 
                 showCancelMatchbar();
                 $('#current-match-id').hide();
@@ -194,6 +190,14 @@ $(document).ready(function() {
         setInterval(update, REFRESH_RATE);
     }
 
+    $('#opponent td').click(function(event) {
+        if(myTurn) {
+            send('match/hit', {'player_id': playerID}, function (response) {
+
+            });
+        }
+    });
+
     function showCancelMatchbar() {
         $('#end-match-bar').show();
         $('#match-bar').hide();
@@ -204,7 +208,7 @@ $(document).ready(function() {
         send('match/status', {'id': matchID }, function (response) {
            updateStatus('Status: <strong>' + response.status + '</strong>');
            if(response.status === 'PLAYING') {
-               myTurn = response.playerTurn === playerName;
+               myTurn = response.turn === playerID;
                updateStatus(myTurn ? 'Your turn: Try to hit the opponent\'s ships!' : 'Opponent turn: Watch out!');
 
                $('#opponent').css('opacity', myTurn ? '1' : '0.25');

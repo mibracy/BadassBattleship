@@ -13,7 +13,6 @@ public class ServerUtil {
         return errorResponse(res, message, 500);
     }
     public static Object errorResponse(Response res, String message, int statusCode) {
-        res.type("application/json");
         res.status(statusCode);
 
         return String.format("{ \"error\": \"%s\" }", message);
