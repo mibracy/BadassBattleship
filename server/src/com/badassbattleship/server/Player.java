@@ -25,7 +25,7 @@ public class Player {
         this.board = board;
     }
 
-    public Board getBoard() {
+    public Board getBoard(Board board) {
         return board;
     }
 

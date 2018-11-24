@@ -38,8 +38,6 @@ public class Board {
 
 			// This will throw on invalid placement.
 			placeShip(id, size, pos, orient);
-		} else {
-			throw new Exception("Too many ships being placed.");
 		}
 	}
 	
@@ -66,11 +64,6 @@ public class Board {
 			default:
 				break;
 		}
-	}
-
-	public boolean placeHit(int x, int y) throws Exception {
-		// return TRUE if successful hit, FALSE if unsuccessful
-		return false;
 	}
 	
 	public void printGridToConsole() {

@@ -40,7 +40,6 @@ public class Battleship {
 				get("/new", MatchController.getInstance()::newMatch, gson::toJson);
 				get("/join", MatchController.getInstance()::joinMatch, gson::toJson);
 				get("/status", MatchController.getInstance()::status, gson::toJson);
-				get("/hit", MatchController.getInstance()::performHit, gson::toJson);
 			});
 		});
 	}
