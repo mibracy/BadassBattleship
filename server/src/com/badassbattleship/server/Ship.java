@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 public class Ship {
     @Expose
 	private int size;
+    private int hits = 0;
 
     @Expose
 	private ShipOrientation orientation; // 0 for horizontal 1 for vertical
@@ -33,7 +34,19 @@ public class Ship {
 	public void setOrientation(ShipOrientation orientation) {
 		this.orientation = orientation;
 	}
-}
+	public void successfulHit() {
+		hits++;
+	}
+	public boolean checkIfShipDestroyed() {
+		if(size == hits) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+
 
 enum ShipOrientation {
     @Expose
@@ -54,4 +67,5 @@ class Position {
 	public int getY() {
 		return y;
 	}
+}
 }

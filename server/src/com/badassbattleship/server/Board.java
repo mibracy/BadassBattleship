@@ -3,6 +3,8 @@ package com.badassbattleship.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badassbattleship.server.Ship;
+
 import java.util.HashMap;
 
 public class Board {
@@ -75,5 +77,33 @@ public class Board {
 			logger.info(row + "\n");
 		}
 	}
+	public boolean calloutAShot(int x, int y) {
+		boolean response = false;
+		//This method will return false is a shot is a miss and true if it is successful
+		if(grid[y][x] == -1) {
+			grid[y][x] = -3;
+			//change the display here to a miss color
+			response = false;
+		}
+		else if(grid[y][x] == -3 || grid[y][x] == -2) {
+		//This is the case a shot is called out twice. I'm not sure how we get the input from
+		//the player but we should ask the player for a new x and y and then re-call this function
+		}
+		else {
+		//This should get the ship in the hashmap and update its hit count. Then it changes
+		//the grid to reflect the hit and returns true.
+			(ships.get(grid[y][x])).successfulHit();
+			if((ships.get(grid[y][x])).checkIfShipDestroyed() == true) {
+				aliveShips--;
+			}
+			if(aliveShips == 0) {
+				//game over condition
+			}
+			grid[y][x] = -2;
+			//change the display here to a hit color
+			response = true;
+		}
+		return response;
+	}
+	}
 
-}
