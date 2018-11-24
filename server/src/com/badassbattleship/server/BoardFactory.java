@@ -35,7 +35,6 @@ public class BoardFactory {
         //TODO: make sure that no repeated ships or invalid num ships are added! (michael or eric?)
 
         for(Ship ship : ships) {
-           logger.info("Adding ship... " + ship.getStartPosition().getX() + ", " + ship.getStartPosition().getY());
            board.createShip(ship);
         }
 

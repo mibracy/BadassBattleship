@@ -59,6 +59,10 @@ public class Match {
         return null;
     }
 
+    public Player getPlayer(UUID playerId) {
+        return players.get(playerId);
+    }
+
     private void start() {
         // Assign current turn
         this.turn = (UUID)players.keySet().toArray()[0];
