@@ -8,6 +8,10 @@ import com.badassbattleship.server.Ship;
 import java.util.HashMap;
 
 public class Board {
+	public static final int CELL_FREE = -1;
+	public static final int CELL_HIT = -2;
+	public static final int CELL_MISS = -3;
+
 	private static Logger logger = LoggerFactory.getLogger(Board.class);
 
 	private int grid[][];
@@ -23,7 +27,7 @@ public class Board {
 		// Fill with -1 to signal that it is not occupied
 		for(int i = 0; i < grid.length; i++) {
 			for(int j = 0; j < grid.length; j++) {
-				grid[i][j] = -1;
+				grid[i][j] = CELL_FREE;
 			}
 		}
 	}
@@ -47,7 +51,7 @@ public class Board {
 		switch(orient) {
 			case HORIZONTAL:
 				for (int i = 0; i < size; i++) {
-					if (grid[pos.getY()][pos.getX() + i] == -1) {
+					if (grid[pos.getY()][pos.getX() + i] == CELL_FREE) {
 						grid[pos.getY()][pos.getX() + i] = id;
 					} else {
 						throw new Exception("Invalid placement");
@@ -56,7 +60,7 @@ public class Board {
 				break;
 			case VERTICAL:
 				for (int i = 0; i < size; i++) {
-					if (grid[pos.getY() + i][pos.getX()] == -1) {
+					if (grid[pos.getY() + i][pos.getX()] == CELL_FREE) {
 						grid[pos.getY() + i][pos.getX()] = id;
 					} else {
 						throw new Exception("Invalid placement");
@@ -77,33 +81,46 @@ public class Board {
 			logger.info(row + "\n");
 		}
 	}
-	public boolean calloutAShot(int x, int y) {
-		boolean response = false;
-		//This method will return false is a shot is a miss and true if it is successful
-		if(grid[y][x] == -1) {
-			grid[y][x] = -3;
+
+	/**
+	 * Returns a GameState enum which determines if a hit is a miss, hit, duplicate,
+	 * or game-ending condition.
+	 * @param x Hit X
+	 * @param y Hit Y
+	 * @return GameState
+	 */
+	public GameState calloutShot(int x, int y) {
+		if(grid[y][x] == CELL_FREE) {
+			grid[y][x] = CELL_MISS;
 			//change the display here to a miss color
-			response = false;
+			return GameState.MISS;
 		}
-		else if(grid[y][x] == -3 || grid[y][x] == -2) {
-		//This is the case a shot is called out twice. I'm not sure how we get the input from
-		//the player but we should ask the player for a new x and y and then re-call this function
+		else if(grid[y][x] == CELL_MISS || grid[y][x] == CELL_HIT) {
+			return GameState.DUPLICATE_HIT;
 		}
 		else {
-		//This should get the ship in the hashmap and update its hit count. Then it changes
-		//the grid to reflect the hit and returns true.
-			(ships.get(grid[y][x])).successfulHit();
-			if((ships.get(grid[y][x])).checkIfShipDestroyed() == true) {
+			//This should get the ship in the hashmap and update its hit count. Then it changes
+			//the grid to reflect the hit and returns true.
+			ships.get(grid[y][x]).successfulHit();
+
+			if((ships.get(grid[y][x])).checkIfShipDestroyed()) {
 				aliveShips--;
 			}
-			if(aliveShips == 0) {
-				//game over condition
-			}
-			grid[y][x] = -2;
-			//change the display here to a hit color
-			response = true;
-		}
-		return response;
-	}
-	}
 
+			grid[y][x] = CELL_HIT;
+
+			if(aliveShips == 0) {
+				// We are done! Let MatchController figure out the rest from here.
+				return GameState.GAME_OVER;
+			}
+
+			return GameState.HIT;
+		}
+	}
+}
+enum GameState {
+	HIT,
+	MISS,
+	DUPLICATE_HIT,
+	GAME_OVER
+}

@@ -6,66 +6,69 @@ import com.google.gson.annotations.SerializedName;
 
 public class Ship {
     @Expose
-	private int size;
+    private int size;
     private int hits = 0;
 
     @Expose
-	private ShipOrientation orientation; // 0 for horizontal 1 for vertical
+    private ShipOrientation orientation; // 0 for horizontal 1 for vertical
 
     @Expose
-	private Position position; // Used for serialization - changing this does not change position on board!
-	
-	public Ship(int size) {
-		this.size = size;
-	}
+    private Position position; // Used for serialization - changing this does not change position on board!
 
-	public int getSize() {
-		return size;
-	}
+    public Ship(int size) {
+        this.size = size;
+    }
 
-	public Position getStartPosition() {
-		return position;
-	}
+    public int getSize() {
+        return size;
+    }
 
-	public ShipOrientation getOrientation() {
-		return orientation;
-	}
+    public Position getStartPosition() {
+        return position;
+    }
 
-	public void setOrientation(ShipOrientation orientation) {
-		this.orientation = orientation;
-	}
-	public void successfulHit() {
-		hits++;
-	}
-	public boolean checkIfShipDestroyed() {
-		if(size == hits) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
+    public ShipOrientation getOrientation() {
+        return orientation;
+    }
 
+    public void setOrientation(ShipOrientation orientation) {
+        this.orientation = orientation;
+    }
+
+    public void successfulHit() {
+        hits++;
+    }
+
+    public boolean checkIfShipDestroyed() {
+        if (size == hits) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}
 
 enum ShipOrientation {
     @Expose
-	@SerializedName("0")
-	HORIZONTAL,
+    @SerializedName("0")
+    HORIZONTAL,
     @Expose
-	@SerializedName("1")
-	VERTICAL
+    @SerializedName("1")
+    VERTICAL
 }
+
 class Position {
     @Expose
-	private int x;
+    private int x;
     @Expose
-	private int y;
-	public int getX() { 
-		return x; 
-	}
-	public int getY() {
-		return y;
-	}
-}
+    private int y;
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
