@@ -139,17 +139,62 @@ public class MatchController {
         return ServerUtil.errorResponse(res, "Invalid match.");
     }
 
-    public Object leaveMatch(Request req, Response res) {
+    /**
+     * Responds to route that contains status of matches.
+     * @param req
+     * @param res
+     * @return
+     */
+    public Object performHit(Request req, Response res) {
         try {
             UUID matchID = UUID.fromString(req.queryParams("id"));
+            UUID playerID = UUID.fromString(req.queryParams("player_id"));
+            int x = Integer.parseInt(req.queryParams("x"));
+            int y = Integer.parseInt(req.queryParams("y"));
 
+            if (matches.containsKey(matchID)) {
+                Match match = matches.get(matchID);
 
+                if(match.getTurn().equals(playerID)) {
+                    Player player = match.getPlayer(playerID);
+                    GameState hitStatus = player.getBoard().calloutShot(x, y);
+
+                    // todo: return the hit status as JSON
+
+                }
+            }
         } catch(IllegalArgumentException ex) {
             logger.error("{} is not a valid match ID (illegal argument exception).",
                     req.queryParams("id"));
+        } catch(Exception ex) {
+            logger.error("Invalid hit or other error.");
         }
 
-        return ServerUtil.errorResponse(res, "Invalid match.");
+        return ServerUtil.errorResponse(res, "Invalid match, hit, or player.");
+    }
+
+    /**
+     * Responds to route that contains status of matches.
+     * @param req
+     * @param res
+     * @return
+     */
+    public Object leaveMatch(Request req, Response res) {
+        try {
+            UUID matchID = UUID.fromString(req.queryParams("id"));
+            UUID playerID = UUID.fromString(req.queryParams("id"));
+
+            if (matches.containsKey(matchID)) {
+                Match match = matches.get(matchID);
+                if(match.getPlayer(playerID) != null) {
+                    //todo: end match here and remove player, let other player know
+                }
+            }
+        } catch (Exception ex) {
+            logger.error("Invalid match or player");
+        }
+
+        return ServerUtil.errorResponse(res, "Invalid match or player.");
     }
 
 }

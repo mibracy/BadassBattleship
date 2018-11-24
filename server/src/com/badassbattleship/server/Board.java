@@ -41,6 +41,8 @@ public class Board {
 
 			// This will throw on invalid placement.
 			placeShip(id, size, pos, orient);
+		} else {
+			throw new Exception("Too many ships being placed.");
 		}
 	}
 	
@@ -86,7 +88,7 @@ public class Board {
 	 * @param y Hit Y
 	 * @return GameState
 	 */
-	public GameState calloutShot(int x, int y) {
+	public GameState calloutShot(int x, int y) throws Exception {
 		if(grid[y][x] == GameSettings.CELL_FREE) {
 			grid[y][x] = GameSettings.CELL_MISS;
 			//change the display here to a miss color

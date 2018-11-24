@@ -193,7 +193,8 @@ $(document).ready(function() {
     $('#opponent td').click(function(event) {
         if(myTurn) {
             send('match/hit', {'player_id': playerID}, function (response) {
-
+                // Check if this was a valid hit
+                
             });
         }
     });

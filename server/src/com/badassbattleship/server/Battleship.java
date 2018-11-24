@@ -39,7 +39,9 @@ public class Battleship {
 			path("/match", () -> {
 				get("/new", MatchController.getInstance()::newMatch, gson::toJson);
 				get("/join", MatchController.getInstance()::joinMatch, gson::toJson);
+				get("/leave", MatchController.getInstance()::leaveMatch, gson::toJson);
 				get("/status", MatchController.getInstance()::status, gson::toJson);
+				get("/hit", MatchController.getInstance()::performHit, gson::toJson);
 			});
 		});
 	}
