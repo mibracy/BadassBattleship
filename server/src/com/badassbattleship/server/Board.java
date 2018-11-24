@@ -82,20 +82,22 @@ public class Board {
 	}
 
 	/**
-	 * Returns a GameState enum which determines if a hit is a miss, hit, duplicate,
+	 * Returns a CellState enum which determines if a hit is a miss, hit, duplicate,
 	 * or game-ending condition.
 	 * @param x Hit X
 	 * @param y Hit Y
 	 * @return GameState
 	 */
-	public GameState calloutShot(int x, int y) throws Exception {
-		if(grid[y][x] == GameSettings.CELL_FREE) {
+	public CellState calloutShot(int x, int y) throws Exception {
+		if(grid[y][x] == GameSettings.CELL_FREE)
+		{
 			grid[y][x] = GameSettings.CELL_MISS;
 			//change the display here to a miss color
-			return GameState.MISS;
+			return CellState.MISS;
 		}
-		else if(grid[y][x] == GameSettings.CELL_MISS || grid[y][x] == GameSettings.CELL_HIT) {
-			return GameState.DUPLICATE_HIT;
+		else if(grid[y][x] == GameSettings.CELL_MISS || grid[y][x] == GameSettings.CELL_HIT)
+		{
+			return CellState.DUPLICATE_HIT;
 		}
 		else {
 			//This should get the ship in the hashmap and update its hit count. Then it changes
@@ -103,23 +105,24 @@ public class Board {
 			ships.get(grid[y][x]).successfulHit();
 
 			if((ships.get(grid[y][x])).checkIfShipDestroyed()) {
-				aliveShips--;
+				if(--aliveShips == 0) {
+					// We are done! Let MatchController figure out the rest from here.
+					return CellState.GAME_OVER;
+				}
+
+				grid[y][x] = GameSettings.CELL_HIT;
+				return CellState.SUNK_SHIP;
 			}
 
 			grid[y][x] = GameSettings.CELL_HIT;
-
-			if(aliveShips == 0) {
-				// We are done! Let MatchController figure out the rest from here.
-				return GameState.GAME_OVER;
-			}
-
-			return GameState.HIT;
+			return CellState.HIT;
 		}
 	}
 }
-enum GameState {
+enum CellState {
 	HIT,
 	MISS,
 	DUPLICATE_HIT,
+	SUNK_SHIP,
 	GAME_OVER
 }

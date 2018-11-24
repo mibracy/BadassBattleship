@@ -67,6 +67,8 @@ var matchID;
 var playerID;
 var myTurn = false;
 
+var sunk = 0;
+
 $(document).ready(function() {
 
     createBattleGrid('#self', 10, 10);
@@ -104,7 +106,6 @@ $(document).ready(function() {
         });
     }
 
-    //todo: clean up
     var prevOffset, curOffset;
 
     $('.ship').draggable({
@@ -139,7 +140,7 @@ $(document).ready(function() {
         for(var y = 0; y < height; ++y){
             var row = '<tr>';
             for (var x = 0; x < width; ++x) {
-                row += '<td id="cell-' + x + '-' + y + '"></td>';
+                row += '<td data-x="' + x + '" data-y="' + y + '"></td>';
             }
             row += '</tr>';
 
@@ -150,8 +151,6 @@ $(document).ready(function() {
     function newMatch() {
         var name = validateName();
         if(name !== '') {
-            //todo: instead of sending json of all ships, try to minimize that string!
-            //i.e. agree on format, ex: 0,0,1,3,... (ship x: 0 y: 0 orientation 1: size 3)
             send('match/new', {'name': name, 'ships': JSON.stringify(ships)}, function (response) {
                 console.log(JSON.stringify(ships));
 
@@ -191,11 +190,27 @@ $(document).ready(function() {
     }
 
     $('#opponent td').click(function(event) {
-        if(myTurn) {
-            send('match/hit', {'player_id': playerID}, function (response) {
-                // Check if this was a valid hit
-                
-            });
+        var cell =  $(this);
+        if(myTurn && !cell.hasClass('hit') && !cell.hasClass('miss')) {
+            send('match/hit', {'id': matchID, 'player_id': playerID, 'x': cell.attr('data-x'), 'y': cell.attr('data-y')},
+                function (response) {
+                    // Check if this was a valid hit
+                    if(response.status === 'HIT' || response.status === 'SUNK_SHIP' || response.status === 'GAME_OVER') {
+                        cell.addClass('hit');
+                    } else if(response.status === 'MISS') {
+                        cell.addClass('miss');
+                    }
+
+                    if(response.status === 'SUNK_SHIP') {
+                        sunk++;
+                        $('#sunk').html(sunk);
+                    } else if(response.status === 'GAME_OVER') {
+                        $('#sunk').html('GAME OVER');
+                    }
+
+                    update();
+                }
+            );
         }
     });
 

@@ -6,6 +6,7 @@
 
 package com.badassbattleship.server;
 
+import com.google.gson.annotations.Expose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -149,6 +150,7 @@ public class MatchController {
         try {
             UUID matchID = UUID.fromString(req.queryParams("id"));
             UUID playerID = UUID.fromString(req.queryParams("player_id"));
+
             int x = Integer.parseInt(req.queryParams("x"));
             int y = Integer.parseInt(req.queryParams("y"));
 
@@ -157,10 +159,17 @@ public class MatchController {
 
                 if(match.getTurn().equals(playerID)) {
                     Player player = match.getPlayer(playerID);
-                    GameState hitStatus = player.getBoard().calloutShot(x, y);
+                    Player opponent = match.getOpponent(playerID);
 
-                    // todo: return the hit status as JSON
+                    CellState hitStatus = opponent.getBoard().calloutShot(x, y);
 
+                    logger.info("{} ONTO {} (match: {}) performed hit ({},{}): {}", player.getName(), opponent.getName(), x, y, hitStatus);
+
+                    opponent.getBoard().printGridToConsole();
+
+                    match.nextTurn();
+
+                    return new HitStatus(hitStatus);
                 }
             }
         } catch(IllegalArgumentException ex) {
@@ -197,4 +206,14 @@ public class MatchController {
         return ServerUtil.errorResponse(res, "Invalid match or player.");
     }
 
+}
+
+// For serialization purposes
+class HitStatus {
+    @Expose
+    public CellState status;
+
+    public HitStatus(CellState status) {
+        this.status = status;
+    }
 }

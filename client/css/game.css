@@ -51,6 +51,16 @@ footer {
     box-shadow: 1px 1px 5px red;
     cursor: crosshair;
 }
+.battle-grid td.hit {
+    background: url(../img/hit.png) rgba(255, 0, 3, 0.46);
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
+.battle-grid td.miss {
+    background-image: url(../img/miss.png);
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
 .labels {
     height: 25px;
 }
@@ -83,18 +93,13 @@ footer {
     width: 60px;
     color: #7a7a7a;
 }
-/*.battle-grid td.coord {
-    border: none;
-    color: #7a7a7a;
-    font-size: 11px;
-}*/
 .ship {
     width: 40px;
     height: 40px;
     display: block;
     position: absolute;
     border: thin solid black;
-    background-color: rgba(0, 182, 204, 0.49);
+    background-color: rgba(43, 43, 43, 0.49);
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 .ship:active {

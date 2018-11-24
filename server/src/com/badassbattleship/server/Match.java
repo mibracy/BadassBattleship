@@ -63,12 +63,28 @@ public class Match {
         return players.get(playerId);
     }
 
+    // Where playerId is NOT the opponent
+    // there's bound to be a better way for this...
+    public Player getOpponent(UUID playerId) {
+        for (UUID key : players.keySet()) {
+            if(!key.equals(playerId)) {
+                return players.get(key);
+            }
+        }
+        return null;
+    }
+
     private void start() {
         // Assign current turn
         this.turn = (UUID)players.keySet().toArray()[0];
 
         // Update the status.
         this.status = MatchStatus.PLAYING;
+    }
+
+    public void nextTurn() {
+        this.turn = getOpponent(turn).getId();
+        System.out.println("New turn to " + turn);
     }
 
     public UUID getNewPlayerId() {

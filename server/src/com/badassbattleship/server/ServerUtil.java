@@ -6,6 +6,7 @@
 
 package com.badassbattleship.server;
 
+import com.google.gson.annotations.Expose;
 import spark.Response;
 
 public class ServerUtil {
@@ -15,6 +16,15 @@ public class ServerUtil {
     public static Object errorResponse(Response res, String message, int statusCode) {
         res.status(statusCode);
 
-        return String.format("{ \"error\": \"%s\" }", message);
+        return new Error(message); //gotta do it this way, otherwise formatting is borked
+    }
+}
+
+// Serialization purposes
+class Error {
+    @Expose
+    public String error;
+    public Error(String error) {
+        this.error = error;
     }
 }
