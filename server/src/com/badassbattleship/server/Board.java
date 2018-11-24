@@ -8,9 +8,6 @@ import com.badassbattleship.server.Ship;
 import java.util.HashMap;
 
 public class Board {
-	public static final int CELL_FREE = -1;
-	public static final int CELL_HIT = -2;
-	public static final int CELL_MISS = -3;
 
 	private static Logger logger = LoggerFactory.getLogger(Board.class);
 
@@ -27,7 +24,7 @@ public class Board {
 		// Fill with -1 to signal that it is not occupied
 		for(int i = 0; i < grid.length; i++) {
 			for(int j = 0; j < grid.length; j++) {
-				grid[i][j] = CELL_FREE;
+				grid[i][j] = GameSettings.CELL_FREE;
 			}
 		}
 	}
@@ -51,7 +48,7 @@ public class Board {
 		switch(orient) {
 			case HORIZONTAL:
 				for (int i = 0; i < size; i++) {
-					if (grid[pos.getY()][pos.getX() + i] == CELL_FREE) {
+					if (grid[pos.getY()][pos.getX() + i] == GameSettings.CELL_FREE) {
 						grid[pos.getY()][pos.getX() + i] = id;
 					} else {
 						throw new Exception("Invalid placement");
@@ -60,7 +57,7 @@ public class Board {
 				break;
 			case VERTICAL:
 				for (int i = 0; i < size; i++) {
-					if (grid[pos.getY() + i][pos.getX()] == CELL_FREE) {
+					if (grid[pos.getY() + i][pos.getX()] == GameSettings.CELL_FREE) {
 						grid[pos.getY() + i][pos.getX()] = id;
 					} else {
 						throw new Exception("Invalid placement");
@@ -90,12 +87,12 @@ public class Board {
 	 * @return GameState
 	 */
 	public GameState calloutShot(int x, int y) {
-		if(grid[y][x] == CELL_FREE) {
-			grid[y][x] = CELL_MISS;
+		if(grid[y][x] == GameSettings.CELL_FREE) {
+			grid[y][x] = GameSettings.CELL_MISS;
 			//change the display here to a miss color
 			return GameState.MISS;
 		}
-		else if(grid[y][x] == CELL_MISS || grid[y][x] == CELL_HIT) {
+		else if(grid[y][x] == GameSettings.CELL_MISS || grid[y][x] == GameSettings.CELL_HIT) {
 			return GameState.DUPLICATE_HIT;
 		}
 		else {
@@ -107,7 +104,7 @@ public class Board {
 				aliveShips--;
 			}
 
-			grid[y][x] = CELL_HIT;
+			grid[y][x] = GameSettings.CELL_HIT;
 
 			if(aliveShips == 0) {
 				// We are done! Let MatchController figure out the rest from here.
