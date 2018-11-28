@@ -7,7 +7,7 @@
 
 //todo: i hate how jquery is just mixed in with normal JS here, so I REALLY want to clean up this entire file
 
-const BASE_URL = "http://localhost:4567/api/";
+const BASE_URL = "/api/";
 
 const MAX_PLAYER_NAME_LENGTH = 20;
 
@@ -181,6 +181,13 @@ $(document).ready(function() {
         }
     }
 
+    function gameover(won) {
+        alert("Game over! " + (won ? "You won!" : "You lost!"));
+        updateStatus('Game over! <a href="index.html">New game?</a>');
+
+        $('#opponent,#self').css('opacity', '0.15');
+    }
+
     function start(matchID) {
         // Cannot drag anymore
         $('.ship').draggable( 'disable' );
@@ -207,7 +214,7 @@ $(document).ready(function() {
                         $('#sunk').html(sunk);
                     } else if(response.status === 'GAME_OVER') {
                         $('#sunk').html('GAME OVER');
-                        alert('Game over! You won!');
+                        gameover(true);
                     }
 
                     update();
@@ -233,14 +240,13 @@ $(document).ready(function() {
 
                if(response.recent_hit_position) {
                    //todo: integrate this with the sending of hits
-                   // Look at the size of the lad
                    var state = response.recent_hit_state;
 
                    $('#self td[data-x="' + response.recent_hit_position.x + '"][data-y="' + response.recent_hit_position.y + '"]')
                        .addClass(state === 'MISS' ? 'miss' : 'hit');
 
                    if(state === 'GAME_OVER') {
-                       alert('Game over! Opponent won.');
+                       gameover(false);
                    }
                }
            }
