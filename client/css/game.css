@@ -99,11 +99,11 @@ footer {
     display: block;
     position: absolute;
     border: thin solid black;
-    background-color: rgba(43, 43, 43, 0.49);
+    background-color: rgba(43, 43, 43, 0.39);
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 .ship:active {
-    border: 3px solid #419c44;
+    border: 3px solid #353535;
 }
 .ui-draggable, .ui-droppable {
     background-position: top;

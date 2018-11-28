@@ -14,6 +14,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import spark.Filter;
+import spark.Spark;
 
 public class Battleship {
 
@@ -24,7 +25,7 @@ public class Battleship {
             .setPrettyPrinting().create();
 
 	public static void main(String[] args) {
-		// JSON renderer
+		Spark.staticFiles.location("/public");
 
 		// we can get rid of this later, it's just for testing and allowing CORS
 		after((Filter) (request, response) -> {

@@ -121,16 +121,33 @@ public class MatchController {
     public Object status(Request req, Response res) {
         try {
             UUID matchID = UUID.fromString(req.queryParams("id"));
+            UUID playerID = UUID.fromString(req.queryParams("player_id"));
 
             if (matches.containsKey(matchID)) {
                 Match match = matches.get(matchID);
+                Player player = match.getPlayer(playerID);
 
-                // Hide the new player IDs, to prevent cheating
-                if(match.getNewPlayerId() != null) {
-                    match.hideNewPlayerId();
+                if(player != null) {
+                    if(match.getStatus() == MatchStatus.PLAYING) {
+                        if (match.getTurn().equals(player.getId()) && player.getBoard().isHitRecently()) {
+                            // Make sure to hide the next time it is requested
+                            player.getBoard().setHitRecently(false);
+
+                            match.setRecentHitPosition(player.getBoard().getRecentHitPosition());
+                            match.setRecentHitState(player.getBoard().getRecentHitState());
+                        } else {
+                            match.setRecentHitPosition(null);
+                            match.setRecentHitState(null);
+                        }
+                    }
+
+                    // Hide the new player IDs, to prevent cheating
+                    if (match.getNewPlayerId() != null) {
+                        match.hideNewPlayerId();
+                    }
+
+                    return match;
                 }
-
-                return match;
             }
         } catch(IllegalArgumentException ex) {
             logger.error("{} is not a valid match ID (illegal argument exception).",

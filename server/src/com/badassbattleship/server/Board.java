@@ -12,11 +12,18 @@ public class Board {
 	private static Logger logger = LoggerFactory.getLogger(Board.class);
 
 	private int grid[][];
+
+	private boolean hitRecently;
+
+	private Position recentHitPosition;
+	private CellState recentHitState;
+
 	private HashMap<Integer, Ship> ships;
 
 	private int aliveShips;
 	
 	public Board() {
+		hitRecently = false;
 		grid = new int[GameSettings.SIZE][GameSettings.SIZE];
 		ships = new HashMap<>();
 		aliveShips = 0;
@@ -70,7 +77,23 @@ public class Board {
 				break;
 		}
 	}
-	
+
+	public Position getRecentHitPosition() {
+		return recentHitPosition;
+	}
+
+	public CellState getRecentHitState() {
+		return recentHitState;
+	}
+
+	public boolean isHitRecently() {
+		return hitRecently;
+	}
+
+	public void setHitRecently(boolean hitRecently) {
+		this.hitRecently = hitRecently;
+	}
+
 	public void printGridToConsole() {
 		for (int i = 0; i < GameSettings.SIZE; i++) {
 			StringBuilder row = new StringBuilder();
@@ -84,15 +107,20 @@ public class Board {
 	/**
 	 * Returns a CellState enum which determines if a hit is a miss, hit, duplicate,
 	 * or game-ending condition.
+	 * TODO: clean up this method
 	 * @param x Hit X
 	 * @param y Hit Y
 	 * @return GameState
 	 */
 	public CellState calloutShot(int x, int y) throws Exception {
+		hitRecently = true;
+		recentHitPosition = new Position(x, y);
+
 		if(grid[y][x] == GameSettings.CELL_FREE)
 		{
 			grid[y][x] = GameSettings.CELL_MISS;
 			//change the display here to a miss color
+			recentHitState = CellState.MISS;
 			return CellState.MISS;
 		}
 		else if(grid[y][x] == GameSettings.CELL_MISS || grid[y][x] == GameSettings.CELL_HIT)
@@ -106,17 +134,22 @@ public class Board {
 
 			if((ships.get(grid[y][x])).checkIfShipDestroyed()) {
 				if(--aliveShips == 0) {
-					// We are done! Let MatchController figure out the rest from here.
+					recentHitState = CellState.GAME_OVER;
 					return CellState.GAME_OVER;
 				}
 
+				//todo: this just feels... weird. need to clean up a bunch of returns in here
 				grid[y][x] = GameSettings.CELL_HIT;
+
+				recentHitState = CellState.SUNK_SHIP;
 				return CellState.SUNK_SHIP;
 			}
 
 			grid[y][x] = GameSettings.CELL_HIT;
-			return CellState.HIT;
+			recentHitState = CellState.HIT;
 		}
+
+		return CellState.HIT;
 	}
 }
 enum CellState {

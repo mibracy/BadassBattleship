@@ -195,6 +195,7 @@ $(document).ready(function() {
             send('match/hit', {'id': matchID, 'player_id': playerID, 'x': cell.attr('data-x'), 'y': cell.attr('data-y')},
                 function (response) {
                     // Check if this was a valid hit
+                    //TODO: replace this with consts or something, it's ugly
                     if(response.status === 'HIT' || response.status === 'SUNK_SHIP' || response.status === 'GAME_OVER') {
                         cell.addClass('hit');
                     } else if(response.status === 'MISS') {
@@ -206,6 +207,7 @@ $(document).ready(function() {
                         $('#sunk').html(sunk);
                     } else if(response.status === 'GAME_OVER') {
                         $('#sunk').html('GAME OVER');
+                        alert('Game over! You won!');
                     }
 
                     update();
@@ -220,14 +222,27 @@ $(document).ready(function() {
     }
 
     function update() {
-        // Need to get info about match.
-        send('match/status', {'id': matchID }, function (response) {
+        // todo: clean this up
+        send('match/status', {'id': matchID, 'player_id': playerID }, function (response) {
            updateStatus('Status: <strong>' + response.status + '</strong>');
            if(response.status === 'PLAYING') {
                myTurn = response.turn === playerID;
-               updateStatus(myTurn ? 'Your turn: Try to hit the opponent\'s ships!' : 'Opponent turn: Watch out!');
+               updateStatus(myTurn ? 'Your turn: Try to hit the opponent\'s ships!' : 'Opponent\'s turn: Watch out!');
 
                $('#opponent').css('opacity', myTurn ? '1' : '0.25');
+
+               if(response.recent_hit_position) {
+                   //todo: integrate this with the sending of hits
+                   // Look at the size of the lad
+                   var state = response.recent_hit_state;
+
+                   $('#self td[data-x="' + response.recent_hit_position.x + '"][data-y="' + response.recent_hit_position.y + '"]')
+                       .addClass(state === 'MISS' ? 'miss' : 'hit');
+
+                   if(state === 'GAME_OVER') {
+                       alert('Game over! Opponent won.');
+                   }
+               }
            }
         });
     }

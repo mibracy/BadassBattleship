@@ -27,6 +27,12 @@ public class Match {
     @Expose
     private UUID newPlayerId;
 
+    @Expose
+    private Position recentHitPosition;
+
+    @Expose
+    private CellState recentHitState;
+
     private LocalDateTime created;
 
     // We need to make sure we never add more than 2 players. Better data structure for that?
@@ -84,7 +90,6 @@ public class Match {
 
     public void nextTurn() {
         this.turn = getOpponent(turn).getId();
-        System.out.println("New turn to " + turn);
     }
 
     public UUID getNewPlayerId() {
@@ -101,6 +106,22 @@ public class Match {
 
     public MatchStatus getStatus() {
         return status;
+    }
+
+    public Position getRecentHitPosition() {
+        return recentHitPosition;
+    }
+
+    public CellState getRecentHitState() {
+        return recentHitState;
+    }
+
+    public void setRecentHitPosition(Position recentHitPosition) {
+        this.recentHitPosition = recentHitPosition;
+    }
+
+    public void setRecentHitState(CellState recentHitState) {
+        this.recentHitState = recentHitState;
     }
 
 }
