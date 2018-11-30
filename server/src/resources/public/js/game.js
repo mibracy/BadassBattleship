@@ -5,8 +5,6 @@
  *     and communicating with the server. This code could be a lot better.
  */
 
-//todo: i hate how jquery is just mixed in with normal JS here, so I REALLY want to clean up this entire file
-
 const BASE_URL = "/api/";
 
 const MAX_PLAYER_NAME_LENGTH = 20;
@@ -108,6 +106,7 @@ $(document).ready(function() {
 
     var prevOffset, curOffset;
 
+    //TODO: BUG - keep dragging altough stopped: registers as not-stopped, i.e. one off!
     $('.ship').draggable({
         grid: [ CELL_SIZE, CELL_SIZE ],
         containment: '.actual-grid',
@@ -117,14 +116,23 @@ $(document).ready(function() {
             curOffset = $.extend({},ui.offset);
         },
         stop: function(event, ui) {
-            var x = ui.position.left / CELL_SIZE;
-            var y = ui.position.top / CELL_SIZE;
+            console.log("Cur | Prev | Actual");
+            console.log(curOffset);
+            console.log(prevOffset);
+            console.log(ui.position);
+            var x = Math.round(ui.position.left / CELL_SIZE);
+            var y = Math.round(ui.position.top / CELL_SIZE);
 
             // Update the local array of ships
             var ship = ships.find(x => x.id === event.target.id);
 
+            // ITS A DUPLICATE YOU IDIOT
+            console.log("moving ship " + event.target.id + " to " + x + ", " + y);
+
             ship.position.x = x;
             ship.position.y = y;
+
+            //console.log("json: " + JSON.stringify(ships));
         }
     }).droppable({
         // Prevent the ship from being placed too close to other ships
@@ -196,6 +204,7 @@ $(document).ready(function() {
         setInterval(update, REFRESH_RATE);
     }
 
+    //TODO: make code better
     $('#opponent td').click(function(event) {
         var cell =  $(this);
         if(myTurn && !cell.hasClass('hit') && !cell.hasClass('miss')) {
@@ -239,7 +248,7 @@ $(document).ready(function() {
                $('#opponent').css('opacity', myTurn ? '1' : '0.25');
 
                if(response.recent_hit_position) {
-                   //todo: integrate this with the sending of hits
+                   //todo: fix this
                    var state = response.recent_hit_state;
 
                    $('#self td[data-x="' + response.recent_hit_position.x + '"][data-y="' + response.recent_hit_position.y + '"]')
@@ -277,6 +286,7 @@ $(document).ready(function() {
         }).fail(function (jqXHR, textStatus, errorThrown) {
             $('#end-match-bar').hide();
             $('#match-bar').show();
+
             errorStatus(errorThrown);
         });
     }
