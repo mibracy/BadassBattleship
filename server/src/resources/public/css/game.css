@@ -5,10 +5,21 @@
     margin: 0 15px 0 5px;
 }
 footer {
+    position: fixed;
+    bottom: 2%;
     text-align: center;
-    padding: 50px;
+    width: 100%;
     color: #7a7a7a;
 }
+
+#about {
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
 .game {
     padding-top: 120px;
     display: block;
