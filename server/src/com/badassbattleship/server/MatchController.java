@@ -180,9 +180,11 @@ public class MatchController {
 
                     CellState hitStatus = opponent.getBoard().calloutShot(x, y);
 
-                    logger.info("{} ONTO {} (match: {}) performed hit ({},{}): {}", player.getName(), opponent.getName(), x, y, hitStatus);
+                    if(hitStatus == CellState.GAME_OVER) {
+                        matches.remove(matchID);
+                    }
 
-                    opponent.getBoard().printGridToConsole();
+                    logger.info("{} ONTO {} (match: {}) performed hit ({},{}): {}", player.getName(), opponent.getName(), x, y, hitStatus);
 
                     match.nextTurn();
 

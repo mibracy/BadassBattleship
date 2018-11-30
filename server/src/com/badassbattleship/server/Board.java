@@ -138,7 +138,6 @@ public class Board {
 					return CellState.GAME_OVER;
 				}
 
-				//todo: this just feels... weird. need to clean up a bunch of returns in here
 				grid[y][x] = GameSettings.CELL_HIT;
 
 				recentHitState = CellState.SUNK_SHIP;

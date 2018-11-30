@@ -56,7 +56,7 @@ footer {
     border: 1px solid #7a7a7a;
     text-align: center;
 }
-.battle-grid td:hover {
+.battle-grid[id="opponent"] td:hover {
     background: rgba(255, 0, 8, 0.64);
     border: 1px solid red;
     box-shadow: 1px 1px 5px red;
@@ -109,12 +109,8 @@ footer {
     height: 40px;
     display: block;
     position: absolute;
-    border: thin solid black;
+    border: none;
     background-color: rgba(43, 43, 43, 0.39);
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-}
-.ship:active {
-    border: 3px solid #353535;
 }
 .ui-draggable, .ui-droppable {
     background-position: top;
