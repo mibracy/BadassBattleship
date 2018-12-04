@@ -65,7 +65,7 @@ var matchID;
 var playerID;
 var myTurn = false;
 
-var sunk = 0;
+var sunk = 0, remaining = ships.length;
 
 $(document).ready(function () {
 
@@ -85,12 +85,12 @@ $(document).ready(function () {
 
     // New Match Button
     $('#new-match').click(function () {
-        newMatch()
+        newMatch();
     });
 
     // Join Match Button
     $('#join-match').click(function () {
-        joinMatch($('#match-id').val())
+        joinMatch($('#match-id').val());
     });
 
     function spawnShips() {
@@ -108,7 +108,7 @@ $(document).ready(function () {
         });
     }
 
-    var beginPos, didRevert = false;
+    var didRevert = false;
 
     $('.ship').draggable({
         grid: [CELL_SIZE, CELL_SIZE],
@@ -124,7 +124,6 @@ $(document).ready(function () {
                 return true;
             }
         },
-        revertDuration: 300,
         stop(event, ui) {
             if (didRevert) {
                 return;
@@ -135,8 +134,6 @@ $(document).ready(function () {
 
             // Update the local array of ships
             var ship = ships.find(x => x.id === event.target.id);
-
-            console.log("moving ship " + event.target.id + " to " + x + ", " + y);
 
             ship.position.x = x;
             ship.position.y = y;
@@ -220,7 +217,6 @@ $(document).ready(function () {
                 },
                 function (response) {
                     // Check if this was a valid hit
-                    //TODO: replace this with consts or something, it's ugly
                     if (response.status === 'HIT' || response.status === 'SUNK_SHIP' || response.status === 'GAME_OVER') {
                         cell.addClass('hit');
                     } else if (response.status === 'MISS') {
@@ -257,14 +253,18 @@ $(document).ready(function () {
                 $('#opponent').css('opacity', myTurn ? '1' : '0.25');
 
                 if (response.recent_hit_position) {
-                    //todo: fix this
                     var state = response.recent_hit_state;
 
+                    // there's got to be a better way for this
                     $('#self td[data-x="' + response.recent_hit_position.x + '"][data-y="' + response.recent_hit_position.y + '"]')
                         .addClass(state === 'MISS' ? 'miss' : 'hit');
 
                     if (state === 'GAME_OVER') {
                         gameover(false);
+                        $('#remaining').html('GAME OVER');
+                    } else if (state === 'SUNK_SHIP') {
+                        remaining--;
+                        $('#remaining').html(remaining);
                     }
                 }
             }
@@ -279,7 +279,6 @@ $(document).ready(function () {
         updateStatus('An error occurred: ' + error);
     }
 
-    //todo (tobi): specify method, make POST!
     function send(endpoint, data, callback) {
         $.ajax({
             method: 'GET',
