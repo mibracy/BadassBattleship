@@ -13,6 +13,7 @@ import spark.Request;
 import spark.Response;
 
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -24,7 +25,7 @@ public class MatchController {
     private static MatchController instance = null;
 
     // Stores active matches.
-    private HashMap<UUID, Match> matches;
+    private HashMap<Integer, Match> matches;
 
     private MatchController() {
         logger.info("Match controller has started.");
@@ -49,7 +50,8 @@ public class MatchController {
         String playerName = req.queryParams("name");
         String shipsJSON = req.queryParams("ships");
 
-        UUID matchID = UUID.randomUUID();
+        Random rnd = new Random();
+        int matchID = rnd.nextInt(50000);
 
         try {
             Match newMatch = new Match(matchID);
@@ -82,7 +84,7 @@ public class MatchController {
         String shipsJSON = req.queryParams("ships");
 
         try {
-            UUID matchID = UUID.fromString(req.queryParams("id"));
+            int matchID = Integer.parseInt(req.queryParams("id"));
 
             if (matches.containsKey(matchID)) {
                 Match match = matches.get(matchID);
@@ -120,7 +122,7 @@ public class MatchController {
      */
     public Object status(Request req, Response res) {
         try {
-            UUID matchID = UUID.fromString(req.queryParams("id"));
+            int matchID = Integer.parseInt(req.queryParams("id"));
             UUID playerID = UUID.fromString(req.queryParams("player_id"));
 
             if (matches.containsKey(matchID)) {
@@ -165,7 +167,7 @@ public class MatchController {
      */
     public Object performHit(Request req, Response res) {
         try {
-            UUID matchID = UUID.fromString(req.queryParams("id"));
+            int matchID = Integer.parseInt(req.queryParams("id"));
             UUID playerID = UUID.fromString(req.queryParams("player_id"));
 
             int x = Integer.parseInt(req.queryParams("x"));
@@ -209,7 +211,7 @@ public class MatchController {
      */
     public Object leaveMatch(Request req, Response res) {
         try {
-            UUID matchID = UUID.fromString(req.queryParams("id"));
+            int matchID = Integer.parseInt(req.queryParams("id"));
             UUID playerID = UUID.fromString(req.queryParams("id"));
 
             if (matches.containsKey(matchID)) {

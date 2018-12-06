@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Match {
 
     @Expose
-    private UUID id;
+    private int id;
 
     @Expose
     private MatchStatus status;
@@ -38,7 +38,7 @@ public class Match {
     // We need to make sure we never add more than 2 players. Better data structure for that?
     private HashMap<UUID, Player> players;
 
-    public Match(UUID id) {
+    public Match(int id) {
         this.players = new HashMap<>();
         this.id = id;
         this.status = MatchStatus.READY_BUT_WAITING_OPPONENT;

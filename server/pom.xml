@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.badassbattleship</groupId>
   <artifactId>badass-battleship</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
       <resources>
@@ -19,6 +19,21 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.badassbattleship.server.Battleship</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
     </plugins>
   </build>
   <dependencies>

@@ -49,7 +49,7 @@ var ships = [
     {
         id: 'ship-destroyer',
         size: 2,
-        orientation: ORIENTATION.Horizontal,
+        orientation: ORIENTATION.Vertical,
         position: {x: 2, y: 8}
     },
     {
