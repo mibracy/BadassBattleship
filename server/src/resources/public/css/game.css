@@ -1,0 +1,120 @@
+* {
+    font-family: 'Arvo', sans-serif;
+}
+.navbar button {
+    margin: 0 15px 0 5px;
+}
+footer {
+    position: fixed;
+    bottom: 2%;
+    text-align: center;
+    width: 100%;
+    color: #7a7a7a;
+}
+
+#about {
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.game {
+    padding-top: 120px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.score {
+    padding: 5px;
+    background: #f3f3f3;
+    margin-bottom: 15px;
+}
+.navbar-brand img {
+    width: 150px;
+}
+.battle-grid {
+    table-layout: fixed;
+    margin: 0 auto;
+    float: none;
+    width: 401px;
+    height: 401px;
+    z-index: 5;
+    background-color: #efefef;
+}
+.actual-grid {
+    margin: 0 auto;
+    float: none;
+    width: 401px;
+    height: 401px;
+    position: absolute;
+    left: 85px;
+}
+.battle-grid td {
+    border-collapse:collapse;
+    border: 1px solid #7a7a7a;
+    text-align: center;
+}
+.battle-grid[id="opponent"] td:hover {
+    background: rgba(255, 0, 8, 0.64);
+    border: 1px solid red;
+    box-shadow: 1px 1px 5px red;
+    cursor: crosshair;
+}
+.battle-grid td.hit {
+    background: url(../img/hit.png) rgba(255, 0, 3, 0.46);
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
+.battle-grid td.miss {
+    background-image: url(../img/miss.png);
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
+.labels {
+    height: 25px;
+}
+.labels ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.labels .horizontal {
+    margin: 0 auto;
+    width: 401px;
+}
+.labels .horizontal ul li {
+    float:left;
+    font-size: 11px;
+    width: 40px;
+    color: #7a7a7a;
+}
+.labels .vertical {
+    margin-top: 20px;
+    height: 401px;
+    z-index: 10;
+}.labels .vertical ul {
+    margin-left: 15px;
+}
+.labels .vertical ul li {
+    font-size: 11px;
+    height: 40px;
+    width: 60px;
+    color: #7a7a7a;
+}
+.ship {
+    width: 40px;
+    height: 40px;
+    display: block;
+    position: absolute;
+    border: none;
+    background-color: rgba(43, 43, 43, 0.39);
+}
+.ui-draggable, .ui-droppable {
+    background-position: top;
+}
+#match-bar, #end-match-bar * {
+    margin-left: 5px;
+}
